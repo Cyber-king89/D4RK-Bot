@@ -207,6 +207,11 @@ const {
 	getSapi,
 	getGajah
 } = require('./storage/user/buruan.js')
+const {
+	jadibot,
+	stopjadibot,
+	listjadibot
+} = require('./lib/jadibot')
 const timestampe = speed();
 const latensie = speed() - timestampe
 let DarahAwal = global.rpg.darahawal
@@ -370,63 +375,178 @@ module.exports = Kanappi = async (Kanappi, m, chatUpdate, store) => {
 			console.error(err)
 		}
 
+		const mentions = (teks, memberr, id) => {
+			(id == null || id == undefined || id == false) ? Kanappi.sendMessage(from, {
+				text: teks.trim(),
+				jpegThumbnail: log0
+			}, extendedText, {
+				sendEphemeral: true,
+				contextInfo: {
+					"mentionedJid": memberr
+				}
+			}): Kanappi.sendMessage(from, {
+				text: teks.trim(),
+				jpegThumbnail: log0
+			}, extendedText, {
+				sendEphemeral: true,
+				quoted: mek,
+				contextInfo: {
+					"mentionedJid": memberr
+				}
+			})
+		}
+
+		const sendStickerFromUrl = async (to, url) => {
+			var names = Date.now() / 10000;
+			var download = function(uri, filename, callback) {
+				request.head(uri, function(err, res, body) {
+					request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+				});
+			};
+			download(url, './stik' + names + '.png', async function() {
+				console.log('succes');
+				let filess = './stik' + names + '.png'
+				let asw = './stik' + names + '.webp'
+				exec(`ffmpeg -i ${filess} -vcodec libwebp -filter:v fps=fps=20 -lossless 1 -loop 0 -preset default -an -vsync 0 -s 512:512 ${asw}`, (err) => {
+					let media = fs.readFileSync(asw)
+					Kanappi.sendMessage(to, media, MessageType.sticker, {
+						quoted: mek
+					})
+					fs.unlinkSync(filess)
+					fs.unlinkSync(asw)
+				});
+			});
+		}
+
+		const sendFileFromUrl = async (link, type, options) => {
+			hasil = await getBuffer(link)
+			Kanappi.sendMessage(from, hasil, type, options).catch(e => {
+				fetch(link).then((hasil) => {
+					Kanappi.sendMessage(from, hasil, type, options).catch(e => {
+						Kanappi.sendMessage(from, {
+							url: link
+						}, type, options).catch(e => {
+							reply('*Error Failed To Download And Send Media*')
+							console.log(e)
+						})
+					})
+				})
+			})
+		}
+
+		const sendMediaURL = async (to, url, text = "", mids = []) => {
+			if (mids.length > 0) {
+				text = normalizeMention(to, text, mids)
+			}
+			const fn = Date.now() / 10000;
+			const filename = fn.toString()
+			let mime = ""
+			var download = function(uri, filename, callback) {
+				request.head(uri, function(err, res, body) {
+					mime = res.headers['content-type']
+					request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+				});
+			};
+			download(url, filename, async function() {
+				console.log('done');
+				let media = fs.readFileSync(filename)
+				let type = mime.split("/")[0] + "Message"
+				if (mime === "image/gif") {
+					type = MessageType.video
+					mime = Mimetype.gif
+				}
+				if (mime.split("/")[0] === "audio") {
+					mime = Mimetype.mp4Audio
+				}
+				Kanappi.sendMessage(to, media, type, {
+					quoted: mek,
+					"externalAdReply": {
+						"title": `${botname}`,
+						"body": `Gʀᴏᴜᴘ Assɪsᴛᴇɴᴛ Bᴏᴛ`,
+						"previewType": 'PHOTO',
+						"thumbnailUrl": `${''}`,
+						"thumbnail": denis,
+						"sourceUrl": `${''}`
+					},
+					mimetype: mime,
+					caption: text,
+					thumbnail: Buffer.alloc(0),
+					contextInfo: {
+						"mentionedJid": mids
+					}
+				})
+
+				fs.unlinkSync(filename)
+			});
+		}
+
 		const fakestatus = (teks) => {
-            return Kanappi.sendMessage(from, teks, text, {
-                quoted: {
-                    key: {
-                        fromMe: false,
-                        participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {})
-                    },
-                    message: {
-                        "imageMessage": {
-                            "url": "https://mmg.whatsapp.net/d/f/At0x7ZdIvuicfjlf9oWS6A3AR9XPh0P-hZIVPLsI70nM.enc",
-                            "mimetype": "image/jpeg",
-                            "caption": fake,
-                            "fileSha256": "+Ia+Dwib70Y1CWRMAP9QLJKjIJt54fKycOfB2OEZbTU=",
-                            "fileLength": "28777",
-                            "height": 1080,
-                            "width": 1079,
-                            "mediaKey": "vXmRR7ZUeDWjXy5iQk17TrowBzuwRya0errAFnXxbGc=",
-                            "fileEncSha256": "sR9D2RS5JSifw49HeBADguI23fWDz1aZu4faWG/CyRY=",
-                            "directPath": "/v/t62.7118-24/21427642_840952686474581_572788076332761430_n.enc?oh=3f57c1ba2fcab95f2c0bb475d72720ba&oe=602F3D69",
-                            "mediaKeyTimestamp": "1610993486",
-                            "jpegThumbnail": fs.readFileSync('./Bot Pic/Kanappi.jpg'),
-                            "scansSidecar": "1W0XhfaAcDwc7xh1R8lca6Qg/1bB4naFCSngM2LKO2NoP5RI7K+zLw=="
-                        }
-                    }
-                }
-            })
-        }
-        const fakethumb = (teks, yes) => {
-            return Kanappi.sendMessage(from, teks, image, {thumbnail:fs.readFileSync('./Bot Pic/Kanappi.jpg'),quoted:mek,caption:yes})
-        }
-        const fakegroup = (teks) => {
-            return Kanappi.sendMessage(from, teks, text, {
-                quoted: {
-                    key: {
-                        fromMe: false,
-                        participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "6289523258649-1604595598@g.us" } : {})
-                    },
-                    message: {
-                        "imageMessage": {
-                            "url": "https://mmg.whatsapp.net/d/f/At0x7ZdIvuicfjlf9oWS6A3AR9XPh0P-hZIVPLsI70nM.enc",
-                            "mimetype": "image/jpeg",
-                            "caption": fake,
-                            "fileSha256": "+Ia+Dwib70Y1CWRMAP9QLJKjIJt54fKycOfB2OEZbTU=",
-                            "fileLength": "28777",
-                            "height": 1080,
-                            "width": 1079,
-                            "mediaKey": "vXmRR7ZUeDWjXy5iQk17TrowBzuwRya0errAFnXxbGc=",
-                            "fileEncSha256": "sR9D2RS5JSifw49HeBADguI23fWDz1aZu4faWG/CyRY=",
-                            "directPath": "/v/t62.7118-24/21427642_840952686474581_572788076332761430_n.enc?oh=3f57c1ba2fcab95f2c0bb475d72720ba&oe=602F3D69",
-                            "mediaKeyTimestamp": "1610993486",
-                            "jpegThumbnail": fs.readFileSync('./Bot Pic/Kanappi.jpg'),
-                            "scansSidecar": "1W0XhfaAcDwc7xh1R8lca6Qg/1bB4naFCSngM2LKO2NoP5RI7K+zLw=="
-                        }
-                    }
-                }
-            })
-        }
+			return Kanappi.sendMessage(from, teks, text, {
+				quoted: {
+					key: {
+						fromMe: false,
+						participant: `0@s.whatsapp.net`,
+						...(from ? {
+							remoteJid: "status@broadcast"
+						} : {})
+					},
+					message: {
+						"imageMessage": {
+							"url": "https://mmg.whatsapp.net/d/f/At0x7ZdIvuicfjlf9oWS6A3AR9XPh0P-hZIVPLsI70nM.enc",
+							"mimetype": "image/jpeg",
+							"caption": fake,
+							"fileSha256": "+Ia+Dwib70Y1CWRMAP9QLJKjIJt54fKycOfB2OEZbTU=",
+							"fileLength": "28777",
+							"height": 1080,
+							"width": 1079,
+							"mediaKey": "vXmRR7ZUeDWjXy5iQk17TrowBzuwRya0errAFnXxbGc=",
+							"fileEncSha256": "sR9D2RS5JSifw49HeBADguI23fWDz1aZu4faWG/CyRY=",
+							"directPath": "/v/t62.7118-24/21427642_840952686474581_572788076332761430_n.enc?oh=3f57c1ba2fcab95f2c0bb475d72720ba&oe=602F3D69",
+							"mediaKeyTimestamp": "1610993486",
+							"jpegThumbnail": fs.readFileSync('./Bot Pic/Kanappi.jpg'),
+							"scansSidecar": "1W0XhfaAcDwc7xh1R8lca6Qg/1bB4naFCSngM2LKO2NoP5RI7K+zLw=="
+						}
+					}
+				}
+			})
+		}
+		const fakethumb = (teks, yes) => {
+			return Kanappi.sendMessage(from, teks, image, {
+				thumbnail: fs.readFileSync('./Bot Pic/Kanappi.jpg'),
+				quoted: mek,
+				caption: yes
+			})
+		}
+		const fakegroup = (teks) => {
+			return Kanappi.sendMessage(from, teks, text, {
+				quoted: {
+					key: {
+						fromMe: false,
+						participant: `0@s.whatsapp.net`,
+						...(from ? {
+							remoteJid: "6289523258649-1604595598@g.us"
+						} : {})
+					},
+					message: {
+						"imageMessage": {
+							"url": "https://mmg.whatsapp.net/d/f/At0x7ZdIvuicfjlf9oWS6A3AR9XPh0P-hZIVPLsI70nM.enc",
+							"mimetype": "image/jpeg",
+							"caption": fake,
+							"fileSha256": "+Ia+Dwib70Y1CWRMAP9QLJKjIJt54fKycOfB2OEZbTU=",
+							"fileLength": "28777",
+							"height": 1080,
+							"width": 1079,
+							"mediaKey": "vXmRR7ZUeDWjXy5iQk17TrowBzuwRya0errAFnXxbGc=",
+							"fileEncSha256": "sR9D2RS5JSifw49HeBADguI23fWDz1aZu4faWG/CyRY=",
+							"directPath": "/v/t62.7118-24/21427642_840952686474581_572788076332761430_n.enc?oh=3f57c1ba2fcab95f2c0bb475d72720ba&oe=602F3D69",
+							"mediaKeyTimestamp": "1610993486",
+							"jpegThumbnail": fs.readFileSync('./Bot Pic/Kanappi.jpg'),
+							"scansSidecar": "1W0XhfaAcDwc7xh1R8lca6Qg/1bB4naFCSngM2LKO2NoP5RI7K+zLw=="
+						}
+					}
+				}
+			})
+		}
 
 		// FAKE TEXT IMG
 		const textImg = (teks) => {
@@ -3048,7 +3168,7 @@ Report Message: ${text}`
 			addEmerald(m.sender, emeraldnya)
 		}
 		break
-			//transaction\\
+		//transaction\\
 		case 'beli':
 		case 'buy': {
 			if (isBan) return reply(mess.ban)
@@ -4312,6 +4432,145 @@ Cieeee, What's Going On❤️💖👀`
 			}
 		}
 		break
+		case 'seenby': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			if (!m.isGroup) return reply(mess.group)
+			try {
+				infom = await Kanappi.messageInfo(m.chat, mek.message.extendedTextMessage.contextInfo.stanzaId)
+				tagg = []
+				teks = `*• Read by :*\n\n`
+				for (let i of infom.reads) {
+					teks += '@' + i.jid.split('@')[0] + '\n'
+					teks += `> ` + moment(`${i.t}` * 1000).tz('Asia/Kolkata').format('DD/MM/YYYY hh:mm:ss') + '\n\n'
+					tagg.push(i.jid)
+				}
+				teks += `*• Delivered to :*\n\n`
+				for (let i of infom.deliveries) {
+					teks += '@' + i.jid.split('@')[0] + '\n'
+					teks += `> ` + moment(`${i.t}` * 1000).tz('Asia/Kolkata').format('DD/MM/YYYY hh:mm:ss') + '\n\n'
+					tagg.push(i.jid)
+				}
+				mentions(teks, tagg, true)
+			} catch (e) {
+				console.log(color(e))
+				reply('*Reply chat bot!*')
+			}
+		}
+		break
+		case 'shutdown': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			if (!isCreator) return replay(`${mess.owner}`)
+			reply(`Bye...`)
+			await sleep(3000)
+			process.exit()
+		}
+		break
+		case 'jadibot': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			jadibot(reply, Kanappi, m.chat)
+		}
+		break
+		case 'stopjadibot': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			stopjadibot(reply)
+		}
+		break
+		case 'listbot':
+		case 'listjadibot': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			text = '*「 LIST JADIBOT 」*\n\n'
+			for (let i of listjadibot) {
+				text += `*Number* : ${i.jid.split('@')[0]}
+*Name* : ${i.name}
+*Device* : ${i.phone.device_manufacturer}
+*Model* : ${i.phone.device_model}\n\n`
+			}
+			reply(text)
+		}
+		break
+		case 'clearall':
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			if (!isCreator) return replay(`${mess.owner}`)
+			anu = await Kanappi.chats.all()
+			Kanappi.setMaxListeners(25)
+			for (let _ of anu) {
+				Kanappi.deleteMessage(_.jid)
+			}
+			reply('*done*')
+			break
+		case 'setprefix':
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			if (!isCreator) return replay(`${mess.owner}`)
+			prefix = args.join(' ')
+			Kanappi.sendMessage(from, `*Succes Changing Prefix : ${prefix}*`, text, {
+				quoted: quotedmess,
+				contextInfo: {
+					"forwardingScore": 999,
+					"isForwarded": true
+				}
+			})
+			break
+		case 'restart':
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			if (!isCreator) return replay(`${mess.owner}`)
+			reply(`*Restarting.....*`)
+			exec(`cd && npm start`)
+			sleep(4000)
+			reply('*Success...*')
+			break
+
+		case 'readall':
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			if (!isCreator) return replay(`${mess.owner}`)
+			var chats = await Kanappi.chats.all()
+			chats.map(async ({
+				jid
+			}) => {
+				await Kanappi.chatRead(jid)
+			})
+			rdl = `*Successfully read ${chats.length} Chat !*`
+			await Kanappi.sendMessage(from, rdl, MessageType.text, {
+				quoted: ftroli
+			})
+			console.log(chats.length)
+			break
+		case 'rall':
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			if (!isCreator) return replay(`${mess.owner}`)
+			const readallid = await Kanappi.chats.all()
+			Kanappi.setMaxListeners(25)
+			for (let xyz of readallid) {
+				await Kanappi.chatRead(xyz.jid)
+			}
+			Kanappi.sendMessage(from, `Sukses!`, text, {
+				quoted: {
+					key: {
+						fromMe: false,
+						participant: `0@s.whatsapp.net`,
+						...(from ? {
+							remoteJid: "status@broadcast"
+						} : {})
+					},
+					message: {
+						"imageMessage": {
+							"mimetype": "image/jpeg",
+							"caption": "Berhasil membaca semua chat!",
+							'jpegThumbnail': log0
+						}
+					}
+				}
+			})
+			break
 		case 'fancy':
 		case 'fancytext':
 		case 'style':
@@ -10703,6 +10962,21 @@ ${global.themeemoji} Media Url : ${images}`,
 				}).catch((err) => reply(`Sorry username ${text} was not found or maybe he/she has no story uploaded in her id`))
 		}
 		break
+		case 'ig2':
+		case 'igdl2':
+		case 'instagram2': {
+			if (!q) return reply('*Which Links?*')
+			if (!q.includes('instagram')) return reply(mess.error.Iv)
+			reply(mess.wait)
+			anu = await igDownloader(`${q}`)
+				.then((data) => {
+					sendMediaURL(m.chat, data.result.link, data.result.desc, mek)
+				})
+				.catch((err) => {
+					reply(String(err))
+				})
+		}
+		break
 		case 'ig':
 		case 'igdl':
 		case 'instagram': {
@@ -10852,6 +11126,46 @@ ${global.themeemoji} Media Url : ${images}`,
 			} catch (err) {
 				reply(`${mess.downerror}`)
 			}
+		}
+		break
+
+		case 'telesticker':
+		case 'telestiker': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			if (!q) return reply(`Example: ${prefix + command} https://t.me/addstickers/LINE_Menhera_chan_ENG`)
+			reply(mess.wait)
+			ini_url = await fetchJson(`https://api.lolhuman.xyz/api/telestick?apikey=${lolkey}&url=${args[0]}`)
+			ini_sticker = ini_url.result.sticker
+			reply('Sending ' + ini_sticker.length + ' stickers...')
+			for (sticker_ in ini_sticker) {
+				ini_buffer = await getBuffer(ini_sticker[sticker_])
+				Kanappi.sendMessage(m.chat, ini_buffer, sticker, {})
+			}
+		}
+		break
+		case 'ghsearch':
+		case 'githubsearch':
+		case 'searchgithub': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			if (!q) return reply('*What are you looking for?*')
+			res = await fetch('https://api.github.com/search/repositories?q=' + q)
+			json = await res.json()
+			if (res.status !== 200) throw json
+			str = json.items.map((repo, index) => {
+				return `
+${1 + index}. *${repo.full_name}*${repo.fork ? ' (fork)' : ''}
+${repo.html_url}
+Made on *${formatDate(repo.created_at)}*
+Last updated on *${formatDate(repo.updated_at)}*
+👁  ${repo.watchers}   🍴  ${repo.forks}   ⭐  ${repo.stargazers_count}
+${repo.open_issues} Issue${repo.description ? `
+*Description:*\n${repo.description}` : ''}
+*Clone:* *$ git clone ${repo.clone_url}*
+`.trim()
+			}).join('\n\n')
+			reply(str)
 		}
 		break
 
@@ -13286,9 +13600,18 @@ _Please choose the button below_`
 			})
 		}
 		break
-		case 'ytss': {
-			let ytt = await ytmp3(args[0])
-			console.log(ytt)
+		case 'brainly': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			if (!args[0]) return reply(mess.noargs)
+			brainly(args.join(" ")).then(res => {
+				hmm = '────────────\n'
+				for (let Y of res.data) {
+					hmm += `\n*「 _BRAINLY_ 」*\n\n*➸ Question:* ${Y.pertanyaan}\n\n*➸ Answer:* ${Y.jawaban[0].text}\n───────────\n`
+				}
+				reply(hmm)
+				console.log(res)
+			})
 		}
 		break
 		case 'getmusic':
@@ -13760,6 +14083,83 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 				reply(e)
 			}
 			break
+
+		case 'fastvid': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			if (!isQuotedVideo) return reply(mess.viderr)
+			fakegroup(mess.wait)
+			encmedia = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
+			media = await Kanappi.downloadAndSaveMediaMessage(encmedia)
+			ran = getRandom('.mp4')
+			exec(`ffmpeg -i ${media} -filter_complex "[0:v]setpts=0.5*PTS[v];[0:a]atempo=2[a]" -map "[v]" -map "[a]" ${ran}`, (err) => {
+				fs.unlinkSync(media)
+				if (err) return fakegroup(`Err: ${err}`)
+				buffer453 = fs.readFileSync(ran)
+				Kanappi.sendMessage(from, buffer453, video, {
+					mimetype: 'video/mp4',
+					quoted: mek
+				})
+				fs.unlinkSync(ran)
+			})
+		}
+		break
+		case 'slowvid': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			if (!isQuotedVideo) return reply(mess.viderr)
+			fakegroup(mess.wait)
+			encmedia = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
+			media = await Kanappi.downloadAndSaveMediaMessage(encmedia)
+			ran = getRandom('.mp4')
+			exec(`ffmpeg -i ${media} -filter_complex "[0:v]setpts=2*PTS[v];[0:a]atempo=0.5[a]" -map "[v]" -map "[a]" ${ran}`, (err) => {
+				fs.unlinkSync(media)
+				if (err) return fakegroup(`Err: ${err}`)
+				buffer453 = fs.readFileSync(ran)
+				Kanappi.sendMessage(from, buffer453, video, {
+					mimetype: 'video/mp4',
+					quoted: mek
+				})
+				fs.unlinkSync(ran)
+			})
+		}
+		break
+		case 'reversevid': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			if (!isQuotedVideo) return reply(mess.viderr)
+			encmedia = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
+			media = await Kanappi.downloadAndSaveMediaMessage(encmedia)
+			ran = getRandom('.mp4')
+			exec(`ffmpeg -i ${media} -vf reverse -af areverse ${ran}`, (err) => {
+				fs.unlinkSync(media)
+				if (err) return fakegroup(`Err: ${err}`)
+				buffer453 = fs.readFileSync(ran)
+				Kanappi.sendMessage(from, buffer453, video, {
+					mimetype: 'video/mp4',
+					quoted: mek
+				})
+				fs.unlinkSync(ran)
+			})
+		}
+		break
+		case 'cm': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			encmedia = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
+			media = await Kanappi.downloadAndSaveMediaMessage(encmedia)
+			ran = getRandom('.mp4')
+			exec(`ffmpeg -i ${media} "origin(rgb24).png" -c:v libx264 -preset placebo -qp 0 -x264-params "keyint=15:no-deblock=1" -pix_fmt yuv444p10le -sws_flags spline+accurate_rnd+full_chroma_int -vf "colormatrix=bt470bg:bt709" -color_range 1 -colorspace 1 -color_primaries 1 -color_trc 1 "colormatrix_yuv444p10le.avi" ${ran}`, (err, stderr, stdout) => {
+				fs.unlinkSync(media)
+				if (err) return reply('Error!')
+				hah = fs.readFileSync(ran)
+				Kanappi.sendMessage(from, hah, video, {
+					mimetype: 'video/mp4',
+					quoted: ftoko
+				})
+			})
+		}
+		break
 		case 'bass':
 		case 'blown':
 		case 'deep':
@@ -13781,6 +14181,8 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 		case 'tupai':
 		case 'tovn':
 		case 'toptt':
+		case 'baby':
+		case 'gemes':
 			try {
 				let set
 				if(/tovn/.test(command)) set = '-vn -c:a libopus -b:a 128k -vbr on -compression_level 10'
@@ -13804,6 +14206,8 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 				if (/slow/.test(command)) set = '-filter:a "atempo=0.7,asetrate=44100"'
 				if (/smooth/.test(command)) set = '-filter:v "minterpolate=\'mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=120\'"'
 				if (/squirrel/.test(command)) set = '-filter:a "atempo=0.5,asetrate=65100"'
+				if (/baby/.test(command)) set = '-af atempo=3/4,asetrate=44508*4/3'
+				if (/gemes/.test(command)) set = '-filter:a "atempo=1.0,asetrate=50000"'
 				if (/audio/.test(mime)) {
 					replay(mess.wait)
 					let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
@@ -14170,6 +14574,14 @@ View List Of Messages With ${prefix}listmsg`)
 			reply(mess.success)
 			break
 		case 'ping':
+		case 'speed': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			timestampe = speed();
+			latensie = speed() - timestampe
+			reply(`*「 𝙎𝙋𝙀𝙀𝘿 𝙏𝙀𝙎𝙏 」*\nRespond in ${latensie.toFixed(4)} Sec 💬`)
+		}
+		break
 		case 'p':
 		case 'botstatus':
 		case 'statusbot': {

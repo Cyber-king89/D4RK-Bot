@@ -18,14 +18,14 @@ global.doc4 = 'application/zip'
 global.doc5 = 'application/pdf'
 global.doc6 = 'application/vnd.android.package-archive'
 
-global.vcardowner = ['919744933034','919778193762','917907217937'] 
+global.vcardowner = ['919744933034'] 
 global.ownername = "ꜱᴀᴄʜᴜ-ꜱᴇᴛᴛᴀɴ 🕊" 
 global.ytname = "YT: Sachu-Mods" 
 global.socialm = "GitHub: Sachu-Settan" 
 global.location = "United Kottayam 🕊, Kerala ✨, India" 
 
-global.owner = ['919744933034','919778193762','917907217937']
-global.ownertag = ['919744933034','919778193762']
+global.owner = ['919744933034']
+global.ownertag = ['919744933034']
 global.botname = '𝗞𝗮𝗻𝗮𝗽𝗽𝗶 𝗕𝗼𝘁 🍃' 
 global.linkz = "https://bit.ly/Bot-Zone" 
 global.websitex = "https://Sachu-Settan.github.io" // Web Coming Soon
@@ -84,6 +84,8 @@ global.mess = {
     bot: 'This Feature Is Only For Bot',
     wait: 'Prossesing....',
     error: 'Error !!',
+    viderr: 'Replay To A Video !',
+    noargs: 'Please Enter A Query !!',
     linkm: 'Where Is The Link ?',
     notiglink: 'Link Given Is Not Ig (Instagram) Link !!',
     servererror: '⚠ Server Error ⚠',
