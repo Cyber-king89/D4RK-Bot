@@ -75,10 +75,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Sachu-Settan/Kannapi-Bot.git"
+    "url": "git+https://github.com/Sachu-Settan/Kanappi-Bot.git"
   },
   "bugs": {
-    "url": "https://github.com/Sachu-Settan/Kannapi-Bot/issues"
+    "url": "https://github.com/Sachu-Settan/Kanappi-Bot/issues"
   },
-  "homepage": "https://github.com/Sachu-Settan/Kannapi-Bot#readme"
+  "homepage": "https://github.com/Sachu-Settan/Kanappi-Bot#readme"
 }

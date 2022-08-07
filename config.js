@@ -41,13 +41,13 @@ global.themeline = "│✙"
 global.themeendline = "│\n└──────────────────┈ ⳹"
 global.zeroapi = "UGSWgULd"
 
-global.widepicarr = ["Kannapi (3).jpg","Kannapi (1).jpg","Kannapi (2).jpg"]
-kannapii = await widepicarr[Math.floor(Math.random() * widepicarr.length)]
-global.thum = fs.readFileSync("./Bot Pic/Kannapi.jpg") 
-global.log0 = fs.readFileSync("./Bot Pic/Kannapi.jpg") 
-global.err4r = fs.readFileSync("./Bot Pic/Kannapi.jpg") 
-global.thumb = fs.readFileSync("./Bot Pic/Kannapi.jpg") 
-global.widelog0 = await fs.readFileSync(`./Bot Pic/${kannapii}`)
+global.widepicarr = ["Kanappi (3).jpg","Kanappi (1).jpg","Kanappi (2).jpg"]
+Kanappii = widepicarr[Math.floor(Math.random() * widepicarr.length)]
+global.thum = fs.readFileSync("./Bot Pic/Kanappi.jpg") 
+global.log0 = fs.readFileSync("./Bot Pic/Kanappi.jpg") 
+global.err4r = fs.readFileSync("./Bot Pic/Kanappi.jpg") 
+global.thumb = fs.readFileSync("./Bot Pic/Kanappi.jpg") 
+global.widelog0 = fs.readFileSync(`./Bot Pic/${Kanappii}`)
 
 global.premium = ['919744933034'] 
 global.ntilinkytvid = []
@@ -111,7 +111,7 @@ global.rpg = {
    umpanawal: 5,
    potionawal: 1
 }
-global.thumb = fs.readFileSync('./Bot Pic/Kannapi.jpg')
+global.thumb = fs.readFileSync('./Bot Pic/Kanappi.jpg')
 global.flaming = 'https://www6.flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=sketch-name&doScale=true&scaleWidth=800&scaleHeight=500&fontsize=100&text='
 global.fluming = 'https://www6.flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=fluffy-logo&doScale=true&scaleWidth=800&scaleHeight=500&fontsize=100&text='
 global.flarun = 'https://www6.flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=runner-logo&doScale=true&scaleWidth=800&scaleHeight=500&fontsize=100&text='

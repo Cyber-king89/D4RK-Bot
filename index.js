@@ -116,7 +116,7 @@ async function startKanappi() {
 		color: ['#ff9c00'],
 		align: 'center',
 	})
-	CFonts.say(`Multi Device WhatsApp Bot Created By Sachu-Settan | Kannapi Mwol Is Startingg...`, {
+	CFonts.say(`Multi Device WhatsApp Bot Created By Sachu-Settan | Kanappi Mwol Is Startingg...`, {
 		font: 'console',
 		align: 'center',
 		gradient: ['red', 'magenta']
