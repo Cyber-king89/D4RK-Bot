@@ -42,12 +42,12 @@ global.themeendline = "│\n└────────────────�
 global.zeroapi = "UGSWgULd"
 
 global.widepicarr = ["Kannapi (3).jpg","Kannapi (1).jpg","Kannapi (2).jpg"]
-kannapii = await widepicarr[Math.floor(Math.random() * widepicarr.length)]
+kannapii = widepicarr[Math.floor(Math.random() * widepicarr.length)]
 global.thum = fs.readFileSync("./Bot Pic/Kannapi.jpg") 
 global.log0 = fs.readFileSync("./Bot Pic/Kannapi.jpg") 
 global.err4r = fs.readFileSync("./Bot Pic/Kannapi.jpg") 
 global.thumb = fs.readFileSync("./Bot Pic/Kannapi.jpg") 
-global.widelog0 = await fs.readFileSync(`./Bot Pic/${kannapii}`)
+global.widelog0 = fs.readFileSync(`./Bot Pic/${kannapii}`)
 
 global.premium = ['919744933034'] 
 global.ntilinkytvid = []
