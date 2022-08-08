@@ -86,6 +86,7 @@ global.mess = {
     error: 'Error !!',
     correctmediavid: 'This Feature Can Be Only Used For Video !!',
     viderr: 'Replay To A Video !',
+    auderr: 'Replay To A Audio !',
     noargs: 'Please Enter A Query !!',
     linkm: 'Where Is The Link ?',
     notiglink: 'Link Given Is Not Ig (Instagram) Link !!',

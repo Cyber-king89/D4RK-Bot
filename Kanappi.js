@@ -14067,94 +14067,62 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 				reply(e)
 			}
 			break
-		case 'fastvid': {
+			case 'blankmp4':
+			case 'blankvid':{
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
-			if (/video/.test(mime)) {
-			reply(mess.wait)
-			let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
-			ran = getRandom('.mp4')
-			exec(`ffmpeg -i ${media} -filter_complex "[0:v]setpts=0.5*PTS[v];[0:a]atempo=2[a]" -map "[v]" -map "[a]" ${ran}`, (err) => {
-				fs.unlinkSync(media)
-				if (err) return reply(`Err: ${err}`)
-				buffer453 = fs.readFileSync(ran)
-				Kanappi.sendMessage(m.chat, {
-							video: buffer453,
-							mimetype: 'video/mp4'
-						}, {
-							quoted: m
-						})
-				fs.unlinkSync(ran)
-			})
-		} else {
-			reply (mess.correctmediavid)
+			if (!isQuotedAudio) return reply(mess.auderr)
+			try {
+				reply(mess.wait)
+				let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
+				let ran = getRandom('.mp4')
+				set = `-f lavfi -i color=c=black:s=1280x720 -i ${media} -shortest -fflags +shortest`
+				exec(`ffmpeg ${set} ${ran}`, (err, stderr, stdout) => {
+					fs.unlinkSync(media)
+					if (err) return reply(String(err))
+					let buff = fs.readFileSync(ran)
+					Kanappi.sendMessage(m.chat, {
+						video: buff,
+					}, {
+						quoted: m
+					})
+					fs.unlinkSync(ran)
+				})
+			} catch(err) {
+			reply (err)
 		}
 		}
 		break
+		case 'reversevid':
+		case 'smoothvid':
+		case 'fastvid':
 		case 'slowmo':
 		case 'slowvid': {
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
-			if (/video/.test(mime)) {
-			reply(mess.wait)
-			let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
-			ran = getRandom('.mp4')
-			exec(`ffmpeg -i ${media} -filter_complex "[0:v]setpts=2*PTS[v];[0:a]atempo=0.5[a]" -map "[v]" -map "[a]" ${ran}`, (err) => {
-				fs.unlinkSync(media)
-				if (err) return reply(`Err: ${err}`)
-				buffer453 = fs.readFileSync(ran)
-				Kanappi.sendMessage(m.chat, {
-							video: buffer453,
-							mimetype: 'video/mp4'
-						}, {
-							quoted: m
-						})
-				fs.unlinkSync(ran)
-			})
-		} else {
-			reply (mess.correctmediavid)
-		}
-		}
-		break
-		case 'reversevid': {
-			if (isBan) return reply(mess.ban)
-			if (isBanChat) return reply(mess.banChat)
-			if (/video/.test(mime)) {
-			let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
-			ran = getRandom('.mp4')
-			exec(`ffmpeg -i ${media} -vf reverse -af areverse ${ran}`, (err) => {
-				fs.unlinkSync(media)
-				if (err) return reply(`Err: ${err}`)
-				buffer453 = fs.readFileSync(ran)
-				Kanappi.sendMessage(m.chat, {
-							video: buffer453,
-							mimetype: 'video/mp4'
-						}, {
-							quoted: m
-						})
-				fs.unlinkSync(ran)
-			})
-		} else {
-			reply (mess.correctmediavid)
-		}
-		}
-		break
-		case 'cm': {
-			if (isBan) return reply(mess.ban)
-			if (isBanChat) return reply(mess.banChat)
-			let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
-			ran = getRandom('.mp4')
-			exec(`ffmpeg -i ${media} "origin(rgb24).png" -c:v libx264 -preset placebo -qp 0 -x264-params "keyint=15:no-deblock=1" -pix_fmt yuv444p10le -sws_flags spline+accurate_rnd+full_chroma_int -vf "colormatrix=bt470bg:bt709" -color_range 1 -colorspace 1 -color_primaries 1 -color_trc 1 "colormatrix_yuv444p10le.avi" ${ran}`, (err, stderr, stdout) => {
-				fs.unlinkSync(media)
-				if (err) return reply('Error!')
-				hah = fs.readFileSync(ran)
-				Kanappi.sendMessage(m.chat, {
-					video: hah,
-					mimetype: 'video/mp4'
-				}, {
-					quoted: m
+			if(/smoothvid/.test(command)) set = `-filter:v "minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=120'"`
+			if(/fastvid/.test(command)) set = '-vf  "setpts=0.25*PTS"'
+			if(/slowmo/.test(command)) set = '-vf  "setpts=4*PTS"'
+			if (/slowvid/.test(command)) set = '-vf  "setpts=4*PTS"'
+			if (/reversevid/.test(command)) set = '-vf reverse -af areverse'
+			if (/video/.test(mime) || isQuotedVideo) {
+				replay(mess.wait)
+				let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
+				let ran = getRandom('.mp4')
+				exec(`ffmpeg -i ${media} ${set} ${ran}`, (err, stderr, stdout) => {
+					fs.unlinkSync(media)
+					if (err) return reply(String(err))
+					let buff = fs.readFileSync(ran)
+					Kanappi.sendMessage(m.chat, {
+						video: buff,
+					}, {
+						quoted: m
+					})
+					fs.unlinkSync(ran)
 				})
-			})
+			} else {
+			reply (mess.correctmediavid)
+		}
 		}
 		break
 		case 'bass':
