@@ -84,6 +84,7 @@ global.mess = {
     bot: 'This Feature Is Only For Bot',
     wait: 'Prossesing....',
     error: 'Error !!',
+    correctmediavid: 'This Feature Can Be Only Used For Video !!',
     viderr: 'Replay To A Video !',
     noargs: 'Please Enter A Query !!',
     linkm: 'Where Is The Link ?',

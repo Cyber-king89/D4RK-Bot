@@ -34,6 +34,7 @@ const fetch = require('node-fetch')
 const os = require('os')
 const maker = require('mumaker')
 const hx = require("hxz-api")
+const brainly = require('brainly-scraper')
 const moment = require('moment-timezone')
 const {
 	JSDOM
@@ -207,11 +208,6 @@ const {
 	getSapi,
 	getGajah
 } = require('./storage/user/buruan.js')
-const {
-	jadibot,
-	stopjadibot,
-	listjadibot
-} = require('./lib/jadibot')
 const timestampe = speed();
 const latensie = speed() - timestampe
 let DarahAwal = global.rpg.darahawal
@@ -389,7 +385,7 @@ module.exports = Kanappi = async (Kanappi, m, chatUpdate, store) => {
 				jpegThumbnail: log0
 			}, extendedText, {
 				sendEphemeral: true,
-				quoted: mek,
+				quoted: m,
 				contextInfo: {
 					"mentionedJid": memberr
 				}
@@ -410,7 +406,7 @@ module.exports = Kanappi = async (Kanappi, m, chatUpdate, store) => {
 				exec(`ffmpeg -i ${filess} -vcodec libwebp -filter:v fps=fps=20 -lossless 1 -loop 0 -preset default -an -vsync 0 -s 512:512 ${asw}`, (err) => {
 					let media = fs.readFileSync(asw)
 					Kanappi.sendMessage(to, media, MessageType.sticker, {
-						quoted: mek
+						quoted: m
 					})
 					fs.unlinkSync(filess)
 					fs.unlinkSync(asw)
@@ -459,7 +455,7 @@ module.exports = Kanappi = async (Kanappi, m, chatUpdate, store) => {
 					mime = Mimetype.mp4Audio
 				}
 				Kanappi.sendMessage(to, media, type, {
-					quoted: mek,
+					quoted: m,
 					"externalAdReply": {
 						"title": `${botname}`,
 						"body": `Gʀᴏᴜᴘ Assɪsᴛᴇɴᴛ Bᴏᴛ`,
@@ -513,7 +509,7 @@ module.exports = Kanappi = async (Kanappi, m, chatUpdate, store) => {
 		const fakethumb = (teks, yes) => {
 			return Kanappi.sendMessage(from, teks, image, {
 				thumbnail: fs.readFileSync('./Bot Pic/Kanappi.jpg'),
-				quoted: mek,
+				quoted: m,
 				caption: yes
 			})
 		}
@@ -4465,32 +4461,6 @@ Cieeee, What's Going On❤️💖👀`
 			reply(`Bye...`)
 			await sleep(3000)
 			process.exit()
-		}
-		break
-		case 'jadibot': {
-			if (isBan) return reply(mess.ban)
-			if (isBanChat) return reply(mess.banChat)
-			jadibot(reply, Kanappi, m.chat)
-		}
-		break
-		case 'stopjadibot': {
-			if (isBan) return reply(mess.ban)
-			if (isBanChat) return reply(mess.banChat)
-			stopjadibot(reply)
-		}
-		break
-		case 'listbot':
-		case 'listjadibot': {
-			if (isBan) return reply(mess.ban)
-			if (isBanChat) return reply(mess.banChat)
-			text = '*「 LIST JADIBOT 」*\n\n'
-			for (let i of listjadibot) {
-				text += `*Number* : ${i.jid.split('@')[0]}
-*Name* : ${i.name}
-*Device* : ${i.phone.device_manufacturer}
-*Model* : ${i.phone.device_model}\n\n`
-			}
-			reply(text)
 		}
 		break
 		case 'clearall':
@@ -13729,6 +13699,19 @@ _Select video or audio and wait a while_`
 			})
 		}
 		break
+		case 'brainly':
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			if (!text) return reply(mess.noargs)
+             brainly(args.join(" ")).then(res => {
+             hmm = '────────────\n'
+             for (let Y of res.data) {
+             hmm += `\n*「 _BRAINLY_ 」*\n\n*➸ Question:* ${Y.pertanyaan}\n\n*➸ Answer:* ${Y.jawaban[0].text}\n───────────\n`
+}
+             reply(hmm)
+             console.log(res)
+})
+             break
 		case 'ytdl': {
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
@@ -14028,6 +14011,7 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 			try {
 				let set
 				if(/mp3/.test(command)) set = '-vn -ar 44100 -ac 2 -b:a 192k'
+				if(/toaud/.test(command)) set = '-vn -ar 44100 -ac 2 -b:a 192k'
 				if (/tomp3/.test(command)) set = '-vn -ar 44100 -ac 2 -b:a 192k'
 				if (/toaudio/.test(command)) set = '-vn -ar 44100 -ac 2 -b:a 192k'
 				if (/audio/.test(mime)) {
@@ -14083,79 +14067,92 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 				reply(e)
 			}
 			break
-
 		case 'fastvid': {
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
-			if (!isQuotedVideo) return reply(mess.viderr)
-			fakegroup(mess.wait)
-			encmedia = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
-			media = await Kanappi.downloadAndSaveMediaMessage(encmedia)
+			if (/video/.test(mime)) {
+			reply(mess.wait)
+			let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
 			ran = getRandom('.mp4')
 			exec(`ffmpeg -i ${media} -filter_complex "[0:v]setpts=0.5*PTS[v];[0:a]atempo=2[a]" -map "[v]" -map "[a]" ${ran}`, (err) => {
 				fs.unlinkSync(media)
-				if (err) return fakegroup(`Err: ${err}`)
+				if (err) return reply(`Err: ${err}`)
 				buffer453 = fs.readFileSync(ran)
-				Kanappi.sendMessage(from, buffer453, video, {
-					mimetype: 'video/mp4',
-					quoted: mek
-				})
+				Kanappi.sendMessage(m.chat, {
+							video: buffer453,
+							mimetype: 'video/mp4'
+						}, {
+							quoted: m
+						})
 				fs.unlinkSync(ran)
 			})
+		} else {
+			reply (mess.correctmediavid)
+		}
 		}
 		break
+		case 'slowmo':
 		case 'slowvid': {
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
-			if (!isQuotedVideo) return reply(mess.viderr)
-			fakegroup(mess.wait)
-			encmedia = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
-			media = await Kanappi.downloadAndSaveMediaMessage(encmedia)
+			if (/video/.test(mime)) {
+			reply(mess.wait)
+			let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
 			ran = getRandom('.mp4')
 			exec(`ffmpeg -i ${media} -filter_complex "[0:v]setpts=2*PTS[v];[0:a]atempo=0.5[a]" -map "[v]" -map "[a]" ${ran}`, (err) => {
 				fs.unlinkSync(media)
-				if (err) return fakegroup(`Err: ${err}`)
+				if (err) return reply(`Err: ${err}`)
 				buffer453 = fs.readFileSync(ran)
-				Kanappi.sendMessage(from, buffer453, video, {
-					mimetype: 'video/mp4',
-					quoted: mek
-				})
+				Kanappi.sendMessage(m.chat, {
+							video: buffer453,
+							mimetype: 'video/mp4'
+						}, {
+							quoted: m
+						})
 				fs.unlinkSync(ran)
 			})
+		} else {
+			reply (mess.correctmediavid)
+		}
 		}
 		break
 		case 'reversevid': {
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
-			if (!isQuotedVideo) return reply(mess.viderr)
-			encmedia = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
-			media = await Kanappi.downloadAndSaveMediaMessage(encmedia)
+			if (/video/.test(mime)) {
+			let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
 			ran = getRandom('.mp4')
 			exec(`ffmpeg -i ${media} -vf reverse -af areverse ${ran}`, (err) => {
 				fs.unlinkSync(media)
-				if (err) return fakegroup(`Err: ${err}`)
+				if (err) return reply(`Err: ${err}`)
 				buffer453 = fs.readFileSync(ran)
-				Kanappi.sendMessage(from, buffer453, video, {
-					mimetype: 'video/mp4',
-					quoted: mek
-				})
+				Kanappi.sendMessage(m.chat, {
+							video: buffer453,
+							mimetype: 'video/mp4'
+						}, {
+							quoted: m
+						})
 				fs.unlinkSync(ran)
 			})
+		} else {
+			reply (mess.correctmediavid)
+		}
 		}
 		break
 		case 'cm': {
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
-			encmedia = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
-			media = await Kanappi.downloadAndSaveMediaMessage(encmedia)
+			let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
 			ran = getRandom('.mp4')
 			exec(`ffmpeg -i ${media} "origin(rgb24).png" -c:v libx264 -preset placebo -qp 0 -x264-params "keyint=15:no-deblock=1" -pix_fmt yuv444p10le -sws_flags spline+accurate_rnd+full_chroma_int -vf "colormatrix=bt470bg:bt709" -color_range 1 -colorspace 1 -color_primaries 1 -color_trc 1 "colormatrix_yuv444p10le.avi" ${ran}`, (err, stderr, stdout) => {
 				fs.unlinkSync(media)
 				if (err) return reply('Error!')
 				hah = fs.readFileSync(ran)
-				Kanappi.sendMessage(from, hah, video, {
-					mimetype: 'video/mp4',
-					quoted: ftoko
+				Kanappi.sendMessage(m.chat, {
+					video: hah,
+					mimetype: 'video/mp4'
+				}, {
+					quoted: m
 				})
 			})
 		}
