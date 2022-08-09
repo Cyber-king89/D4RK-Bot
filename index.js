@@ -261,12 +261,12 @@ async function startKanappi() {
 						headerType: 4,
 						contextInfo: {
 							externalAdReply: {
-								title: `${ownername}`,
-								body: `Don't forget to read group description`,
-								mediaType: 2,
+								title: `${global.botname}\n⇆ㅤ ||◁ㅤ❚❚ㅤ▷||ㅤ ↻ `,
+								renderLargerThumbnail: true,
+								showAdAttribution: true,
+								body: `01:06 ━━━━⬤─────── 04:05`,
 								thumbnail: log0,
-								sourceUrl: `${websitex}`,
-								mediaUrl: `${websitex}`
+								mediaType: 1,
 							}
 						}
 					}
@@ -329,12 +329,12 @@ async function startKanappi() {
 						headerType: 4,
 						contextInfo: {
 							externalAdReply: {
-								title: `${ownername}`,
-								body: `Bye! my friend, take care.`,
-								mediaType: 2,
+								title: `${global.botname}\n⇆ㅤ ||◁ㅤ❚❚ㅤ▷||ㅤ ↻ `,
+								renderLargerThumbnail: true,
+								showAdAttribution: true,
+								body: `01:06 ━━━━⬤─────── 04:05`,
 								thumbnail: log0,
-								sourceUrl: `${websitex}`,
-								mediaUrl: `${websitex}`
+								mediaType: 1,
 							}
 						}
 					}
@@ -348,7 +348,6 @@ async function startKanappi() {
 		}
 	})
 
-	//Setting\\
 	Kanappi.decodeJid = (jid) => {
 		if (!jid) return jid
 		if (/:\d+@/gi.test(jid)) {
