@@ -461,7 +461,7 @@ module.exports = Kanappi = async (Kanappi, m, chatUpdate, store) => {
 						"body": `Gʀᴏᴜᴘ Assɪsᴛᴇɴᴛ Bᴏᴛ`,
 						"previewType": 'PHOTO',
 						"thumbnailUrl": `${''}`,
-						"thumbnail": denis,
+						"thumbnail": log0,
 						"sourceUrl": `${''}`
 					},
 					mimetype: mime,
@@ -7882,7 +7882,6 @@ ${global.themeendline}
 		case 'efx':
 		case 'bgm':
 		case 'bgmidd': {
-			reply(mess.wait)
 			const pttduration = durationn[Math.floor(Math.random() * durationn.length)]
 			const randomefx = efx[Math.floor(Math.random() * efx.length)]
 			results = await getBuffer(`https://raw.githubusercontent.com/Sachu-Settan/Media/main/efx/${encodeURIComponent(randomefx)}.mp3`)
@@ -8533,6 +8532,7 @@ ${global.themeendline}
 		case 'efx97':
 		case 'efx98':
 		case 'efx99': {
+			reply(mess.wait)
 			const pttduration = durationn[Math.floor(Math.random() * durationn.length)]
 			let results = await getBuffer(`https://raw.githubusercontent.com/Sachu-Settan/Media/main/efx/${encodeURIComponent(command)}.mp3`)
 			await Kanappi.sendMessage(m.chat, {
