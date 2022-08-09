@@ -13880,22 +13880,14 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 				reply(mess.wait)
 				let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
 				let ran = getRandom('.mp4')
-				exec(`ffmpeg -f lavfi -i color=c=black:s=1280x720:r=5 -i ${media} -crf 0 -c:a copy -shortest ${ran}`, (err, stderr, stdout) => {
+				exec(`ffmpeg -f lavfi -i color=c=black:s=1280x720:r=5 -i ${media} -c:a copy -shortest ${ran}`, (err, stderr, stdout) => {
 					fs.unlinkSync(media)
 					if (err) return reply(String(err))
 					let buff = fs.readFileSync(ran)
 					Kanappi.sendMessage(m.chat, {
 						video: buff,
-						contextInfo: {
-							externalAdReply: {
-								title: `${global.linkprev}`,
-								renderLargerThumbnail: true,
-								showAdAttribution: true,
-								body: `${global.linkprevbody}`,
-								thumbnail: log0,
-								mediaType: 1,
-							}
-						}
+						caption: `${watermark}`,
+						jpegThumbnail: fs.readFileSync(`./Media/image/blankimg.jpg`)
 					}, {
 						quoted: m
 					})
