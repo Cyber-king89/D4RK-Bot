@@ -14067,6 +14067,8 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 				reply(e)
 			}
 			break
+			case 'blackvid':
+			case 'blackmp4':
 			case 'blankmp4':
 			case 'blankvid':{
 			if (isBan) return reply(mess.ban)
@@ -14076,8 +14078,7 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 				reply(mess.wait)
 				let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
 				let ran = getRandom('.mp4')
-				set = `-f lavfi -i color=c=black:s=1280x720 -i ${media} -shortest -fflags +shortest`
-				exec(`ffmpeg ${set} ${ran}`, (err, stderr, stdout) => {
+				exec(`ffmpeg -f lavfi -i color=c=black:s=1280x720 -i ${media} -shortest -fflags +shortest ${ran}`, (err, stderr, stdout) => {
 					fs.unlinkSync(media)
 					if (err) return reply(String(err))
 					let buff = fs.readFileSync(ran)
@@ -14089,7 +14090,7 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 					fs.unlinkSync(ran)
 				})
 			} catch(err) {
-			reply (err)
+				reply (err)
 		}
 		}
 		break
@@ -14097,6 +14098,7 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 		case 'smoothvid':
 		case 'fastvid':
 		case 'slowmo':
+		case 'slomo':
 		case 'slowvid': {
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
@@ -14104,6 +14106,7 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 			if(/fastvid/.test(command)) set = '-vf  "setpts=0.25*PTS"'
 			if(/slowmo/.test(command)) set = '-vf  "setpts=4*PTS"'
 			if (/slowvid/.test(command)) set = '-vf  "setpts=4*PTS"'
+			if (/slomo/.test(command)) set = '-vf  "setpts=4*PTS"'
 			if (/reversevid/.test(command)) set = '-vf reverse -af areverse'
 			if (/video/.test(mime) || isQuotedVideo) {
 				replay(mess.wait)
