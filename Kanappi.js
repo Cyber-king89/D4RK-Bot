@@ -8065,12 +8065,12 @@ ${global.themeendline}
 				ptt: true,
 				contextInfo: {
 					externalAdReply: {
-						title: `${global.botname}`,
-						body: `${global.botname}`,
+						title: `${global.botname}\n⇆ㅤ ||◁ㅤ❚❚ㅤ▷||ㅤ ↻ `,
+						renderLargerThumbnail: true,
+						showAdAttribution: true,
+						body: `01:06 ━━━━⬤─────── 04:05`,
 						thumbnail: log0,
-						mediaType: 2,
-						mediaUrl: `${global.websitex}`,
-						sourceUrl: `${global.websitex}`
+						mediaType: 1,
 					}
 				}
 			}, {
@@ -8091,11 +8091,12 @@ ${global.themeendline}
 				ptt: true,
 				contextInfo: {
 					externalAdReply: {
-						title: `${global.botname}`,
+						title: `${global.botname}\n⇆ㅤ ||◁ㅤ❚❚ㅤ▷||ㅤ ↻ `,
+						renderLargerThumbnail: true,
+						showAdAttribution: true,
+						body: `01:06 ━━━━⬤─────── 04:05`,
 						thumbnail: log0,
-						mediaType: 2,
-						mediaUrl: `${global.websitex}`,
-						sourceUrl: `${global.websitex}`
+						mediaType: 1,
 					}
 				}
 			}, {
@@ -8740,12 +8741,12 @@ ${global.themeendline}
 				ptt: true,
 				contextInfo: {
 					externalAdReply: {
-						title: `${global.botname}`,
-						body: `${global.botname}`,
+						title: `${global.botname}\n⇆ㅤ ||◁ㅤ❚❚ㅤ▷||ㅤ ↻ `,
+						renderLargerThumbnail: true,
+						showAdAttribution: true,
+						body: `01:06 ━━━━⬤─────── 04:05`,
 						thumbnail: log0,
-						mediaType: 2,
-						mediaUrl: `${global.websitex}`,
-						sourceUrl: `${global.websitex}`
+						mediaType: 1,
 					}
 				}
 			}, {
@@ -13660,12 +13661,12 @@ _Select video or audio and wait a while_`
 				mimetype: "video/mp4",
 				contextInfo: {
 					externalAdReply: {
-						title: `${global.botname}`,
-						body: `${global.botname}`,
+						title: `${global.botname}\n⇆ㅤ ||◁ㅤ❚❚ㅤ▷||ㅤ ↻ `,
+						renderLargerThumbnail: true,
+						showAdAttribution: true,
+						body: `01:06 ━━━━⬤─────── 04:05`,
 						thumbnail: log0,
-						mediaType: 2,
-						mediaUrl: `${global.websitex}`,
-						sourceUrl: `${global.websitex}`
+						mediaType: 1,
 					}
 				}
 			}, {
@@ -13686,12 +13687,12 @@ _Select video or audio and wait a while_`
 				ptt: true,
 				contextInfo: {
 					externalAdReply: {
-						title: `${global.botname}`,
-						body: `${global.botname}`,
+						title: `${global.botname}\n⇆ㅤ ||◁ㅤ❚❚ㅤ▷||ㅤ ↻ `,
+						renderLargerThumbnail: true,
+						showAdAttribution: true,
+						body: `01:06 ━━━━⬤─────── 04:05`,
 						thumbnail: log0,
-						mediaType: 2,
-						mediaUrl: `${global.websitex}`,
-						sourceUrl: `${global.websitex}`
+						mediaType: 1,
 					}
 				}
 			}, {
@@ -14084,6 +14085,16 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 					let buff = fs.readFileSync(ran)
 					Kanappi.sendMessage(m.chat, {
 						video: buff,
+						contextInfo: {
+							externalAdReply: {
+								title: `${global.botname}\n⇆ㅤ ||◁ㅤ❚❚ㅤ▷||ㅤ ↻ `,
+								renderLargerThumbnail: true,
+								showAdAttribution: true,
+								body: `01:06 ━━━━⬤─────── 04:05`,
+								thumbnail: log0,
+								mediaType: 1,
+							}
+						}
 					}, {
 						quoted: m
 					})
@@ -14118,6 +14129,16 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 					let buff = fs.readFileSync(ran)
 					Kanappi.sendMessage(m.chat, {
 						video: buff,
+						contextInfo: {
+							externalAdReply: {
+								title: `${global.botname}\n⇆ㅤ ||◁ㅤ❚❚ㅤ▷||ㅤ ↻ `,
+								renderLargerThumbnail: true,
+								showAdAttribution: true,
+								body: `01:06 ━━━━⬤─────── 04:05`,
+								thumbnail: log0,
+								mediaType: 1,
+							}
+						}
 					}, {
 						quoted: m
 					})
@@ -14192,12 +14213,12 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 							ptt: true,
 							contextInfo: {
 								externalAdReply: {
-									title: `${global.botname}`,
-									body: `${global.botname}`,
+									title: `${global.botname}\n⇆ㅤ ||◁ㅤ❚❚ㅤ▷||ㅤ ↻ `,
+									renderLargerThumbnail: true,
+									showAdAttribution: true,
+									body: `01:06 ━━━━⬤─────── 04:05`,
 									thumbnail: log0,
-									mediaType: 2,
-									mediaUrl: `${global.websitex}`,
-									sourceUrl: `${global.websitex}`,
+									mediaType: 1,
 								}
 							}
 						}, {
