@@ -7893,7 +7893,7 @@ ${global.themeendline}
 				ptt: true,
 				contextInfo: {
 					externalAdReply: {
-						title: `${global.linkprev}`,
+						title: `${global.linkprevtt}`,
 						renderLargerThumbnail: true,
 						showAdAttribution: true,
 						body: `${global.linkprevbody}`,
@@ -8542,7 +8542,7 @@ ${global.themeendline}
 				ptt: true,
 				contextInfo: {
 					externalAdReply: {
-						title: `${global.linkprev}`,
+						title: `${global.linkprevtt}`,
 						renderLargerThumbnail: true,
 						showAdAttribution: true,
 						body: `${global.linkprevbody}`,
@@ -13462,7 +13462,7 @@ _Select video or audio and wait a while_`
 				mimetype: "video/mp4",
 				contextInfo: {
 					externalAdReply: {
-						title: `${global.linkprev}`,
+						title: `${global.linkprevtt}`,
 						renderLargerThumbnail: true,
 						showAdAttribution: true,
 						body: `${global.linkprevbody}`,
@@ -13488,7 +13488,7 @@ _Select video or audio and wait a while_`
 				ptt: true,
 				contextInfo: {
 					externalAdReply: {
-						title: `${global.linkprev}`,
+						title: `${global.linkprevtt}`,
 						renderLargerThumbnail: true,
 						showAdAttribution: true,
 						body: `${global.linkprevbody}`,
@@ -13924,7 +13924,7 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 						video: buff,
 						contextInfo: {
 							externalAdReply: {
-								title: `${global.linkprev}`,
+								title: `${global.linkprevtt}`,
 								renderLargerThumbnail: true,
 								showAdAttribution: true,
 								body: `${global.linkprevbody}`,
@@ -14006,7 +14006,7 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 							ptt: true,
 							contextInfo: {
 								externalAdReply: {
-									title: `${global.linkprev}`,
+									title: `${global.linkprevtt}`,
 									renderLargerThumbnail: true,
 									showAdAttribution: true,
 									body: `${global.linkprevbody}`,

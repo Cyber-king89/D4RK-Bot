@@ -41,7 +41,7 @@ global.themeline = "│✙"
 global.themeendline = "│\n└──────────────────┈ ⳹"
 global.zeroapi = "UGSWgULd"
 global.linkprevtt = `${global.botname}\n⇆ㅤ ||◁ㅤ❚❚ㅤ▷||ㅤ ↻ `
-global.linkprevbody = `global.linkprev`
+global.linkprevbody = `01:06 ━━━━⬤─────── 04:05`
 
 global.widepicarr = ["Kanappi (3).jpg","Kanappi (1).jpg","Kanappi (2).jpg"]
 Kanappii = widepicarr[Math.floor(Math.random() * widepicarr.length)]
