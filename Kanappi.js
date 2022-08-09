@@ -13880,7 +13880,7 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 				reply(mess.wait)
 				let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
 				let ran = getRandom('.mp4')
-				exec(`ffmpeg -f lavfi -i color=c=black:s=1280x720 -i ${media} -shortest -fflags +shortest ${ran}`, (err, stderr, stdout) => {
+				exec(`ffmpeg -loop 1 -i blankimg.jpg -i ${media} -c:a aac -ab 112k -c:v libx264 -shortest -strict -2 ${ran}`, (err, stderr, stdout) => {
 					fs.unlinkSync(media)
 					if (err) return reply(String(err))
 					let buff = fs.readFileSync(ran)
