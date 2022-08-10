@@ -191,7 +191,7 @@ async function startKanappi() {
 				try {
 					ppuser = await Kanappi.profilePictureUrl(num, 'image')
 				} catch {
-					ppuser = 'https://i0.wp.com/www.gambarunik.id/wp-content/uploads/2019/06/Top-Gambar-Foto-Profil-Kosong-Lucu-Tergokil-.jpg'
+					ppuser = fs.readFileSync(`./Media/image/Profile.jpg`)
 				}
 				try {
 					ppgroup = await Kanappi.profilePictureUrl(anu.id, 'image')
@@ -202,9 +202,9 @@ async function startKanappi() {
 				let nama = await Kanappi.getName(num)
 				memb = metadata.participants.length
 				// let Wlcm = await getBuffer(`https://zerochanbot.herokuapp.com/api/bot/welkom2?pp=${encodeURIComponent(ppuser)}&nama=${encodeURIComponent(nama)}&bg=https://telegra.ph/file/d4c05638fa7886a1d8060.jpg&gc=${encodeURIComponent(metadata.subject)}&member=${encodeURIComponent(memb)}&apikey=${encodeURIComponent(global.zeroapi)}`)
-				let Lft = await getBuffer(`https://zerochanbot.herokuapp.com/api/bot/goodbye2?pp=${encodeURIComponent(ppuser)}&nama=${encodeURIComponent(nama)}&bg=https://telegra.ph/file/d4c05638fa7886a1d8060.jpg&member=${encodeURIComponent(memb)}&apikey=${encodeURIComponent(global.zeroapi)}`)
+				// let Lft = await getBuffer(`https://zerochanbot.herokuapp.com/api/bot/goodbye2?pp=${encodeURIComponent(ppuser)}&nama=${encodeURIComponent(nama)}&bg=https://telegra.ph/file/d4c05638fa7886a1d8060.jpg&member=${encodeURIComponent(memb)}&apikey=${encodeURIComponent(global.zeroapi)}`)
 				let Wlcm = await getBuffer(`https://api.dhamzxploit.my.id/api/canvas/welcome?pp=${encodeURIComponent(ppuser)}&name=${encodeURIComponent(nama)}&bg=https://telegra.ph/file/d4c05638fa7886a1d8060.jpg&grupname=${encodeURIComponent(metadata.subject)}&member=${encodeURIComponent(memb)}`)
-				// let Lft = await getBuffer(`https://api.dhamzxploit.my.id/api/canvas/goodbye?pp=${encodeURIComponent(ppuser)}&nama=${encodeURIComponent(nama)}&bg=https://telegra.ph/file/d4c05638fa7886a1d8060.jpg&member=${encodeURIComponent(memb)}`)
+				let Lft = await getBuffer(`https://api.dhamzxploit.my.id/api/canvas/goodbye?pp=${encodeURIComponent(ppuser)}&nama=${encodeURIComponent(nama)}&bg=https://telegra.ph/file/d4c05638fa7886a1d8060.jpg&member=${encodeURIComponent(memb)}`)
 
 				if (anu.action == 'add') {
 					const buffer = await getBuffer(ppuser)

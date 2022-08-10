@@ -279,7 +279,7 @@ module.exports = Kanappi = async (Kanappi, m, chatUpdate, store) => {
 		const text = q = args.join(" ")
 		const quoted = m.quoted ? m.quoted : m
 		const mime = (quoted.msg || quoted).mimetype || ''
-		const isMedia = /image|video|sticker|audio/.test(mime)
+		const isMedia = /image|video|document|sticker|audio/.test(mime)
 		const from = mek.key.remoteJid
 		const type = Object.keys(mek.message)[0]
 		const content = JSON.stringify(mek.message)
@@ -697,6 +697,27 @@ module.exports = Kanappi = async (Kanappi, m, chatUpdate, store) => {
 					"ptt": "true"
 				}
 			}
+		}
+
+		const replywithjid = (jidd,teks) => {
+			let buttonMessage = {
+				image: widelog0,
+				caption: `${teks}`,
+				headerType: 4,
+				contextInfo: {
+					externalAdReply: {
+						title: `${global.linkprevtt}`,
+						renderLargerThumbnail: true,
+						showAdAttribution: true,
+						body: `${global.linkprevbody}`,
+						thumbnail: log0,
+						mediaType: 1,
+					}
+				}
+			}
+			Kanappi.sendMessage(jidd, buttonMessage, {
+				quoted: quotedmess
+			})
 		}
 
 		const replyy = (teks) => {
@@ -5668,187 +5689,234 @@ ${global.themeendline}
 			})
 		}
 		break
-		case 'bcgc':
-		case 'bcgroup': {
-			if (isBan) return reply(mess.ban)
-			if (isBanChat) return reply(mess.banChat)
-			if (!isCreator) return replay(mess.owner)
-			if (!args.join(" ")) return replay(`Where is the text?\n\nExample : ${prefix + command} ${global.ownername}`)
-			let getGroups = await Kanappi.groupFetchAllParticipating()
-			let groups = Object.entries(getGroups).slice(0).map(entry => entry[1])
-			let anu = groups.map(v => v.id)
-			replay(`Send broadcast to ${anu.length} group chat, time's up ${anu.length * 1.5} second`)
-			for (let i of anu) {
-				await sleep(1500)
-				let btn = [{
-					urlButton: {
-						displayText: 'Bot Web 🍓',
-						url: `${global.websitex}`
-					}
-				}, {
-					urlButton: {
-						displayText: 'Script 🍜',
-						url: `${global.botscript}`
-					}
-				}, {
-					quickReplyButton: {
-						displayText: 'Bot Status 🚀',
-						id: 'ping'
-					}
-				}, {
-					quickReplyButton: {
-						displayText: 'Menu 🐰',
-						id: 'menu'
-					}
-				}, {
-					quickReplyButton: {
-						displayText: 'Owner 😈',
-						id: 'owner'
-					}
-				}]
-				let txt = `*「 ${global.ownername}'s Broadcast」*\n\n${text}`
-				Kanappi.send5ButImg(i, txt, `${global.botname}`, log0, btn, thum)
-			}
-			replay(`Successfully Sent Broadcast To ${anu.length} Group`)
-		}
-		break
+
 		case 'bc':
 		case 'broadcast':
 		case 'bcall': {
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
 			if (!isCreator) return replay(mess.owner)
-			if (!args.join(" ")) return replay(`Where is the text??\n\nExample : ${prefix + command} ${global.ownername}`)
 			let anu = await store.chats.all().map(v => v.id)
 			replay(`Send Broadcast To ${anu.length} Chat\nTime's up ${anu.length * 1.5} second`)
-			for (let yoi of anu) {
+			let buttons = [{
+				"urlButton": {
+					"displayText": "🌏 Bot Web 🌏",
+					"url": `${websitex}`
+				}
+			}, {
+				"urlButton": {
+					"displayText": "Script🔖",
+					"url": `${botscript}`
+				}
+			}]
+			reply(`Send Broadcast To ${anu.length} Chat\nTime's up ${anu.length * 1.5} second`)
+			for (let i of anu) {
 				await sleep(1500)
-				let btn = [{
-					urlButton: {
-						displayText: 'Bot Web 🍓',
-						url: `${global.websitex}`
+				if (/image/.test(mime)) {
+					let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
+					let imagee = fs.readFileSync(media)
+					let buttonMessage = {
+						image: imagee,
+						caption: `${ m.quoted ? m.quoted.text ? m.quoted.text : q ? q : m.text : q ? q : m.text }`,
+						footer: `${global.botname}`,
+						buttons: buttons,
+						headerType: 4,
+						contextInfo: {
+							externalAdReply: {
+								title: `${global.linkprevttimg}`,
+								renderLargerThumbnail: true,
+								showAdAttribution: true,
+								body: `${global.linkprevbodyimg}`,
+								thumbnail: log0,
+								mediaType: 1,
+							}
+						}
 					}
-				}, {
-					urlButton: {
-						displayText: 'Script 🍜',
-						url: `${global.botscript}`
+					Kanappi.sendMessage(i, buttonMessage, {
+						quoted: quotedmess
+					})
+				} else if (/video/.test(mime)) {
+					let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
+					let videoo = fs.readFileSync(media)
+					let Message = {
+						video: videoo,
+						caption: `${ m.quoted ? m.quoted.text ? m.quoted.text : q ? q : m.text : q ? q : m.text }`,
+						contextInfo: {
+							externalAdReply: {
+								title: `${global.linkprevtt}`,
+								renderLargerThumbnail: true,
+								showAdAttribution: true,
+								body: `${global.linkprevbody}`,
+								thumbnail: log0,
+								mediaType: 1,
+							}
+						}
 					}
-				}, {
-					quickReplyButton: {
-						displayText: 'Bot Status 🚀',
-						id: 'ping'
+					Kanappi.sendMessage(i, Message, {
+						quoted: quotedmess
+					})
+				} else if (/document/.test(mime)) {
+					let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
+					let documentt = fs.readFileSync(media)
+					let Message = {
+						document: documentt,
+						contextInfo: {
+							externalAdReply: {
+								title: `${global.linkprevtt}`,
+								renderLargerThumbnail: true,
+								showAdAttribution: true,
+								body: `${global.linkprevbody}`,
+								thumbnail: log0,
+								mediaType: 1,
+							}
+						}
 					}
-				}, {
-					quickReplyButton: {
-						displayText: 'Menu 🐰',
-						id: 'menu'
-					}
-				}, {
-					quickReplyButton: {
-						displayText: 'Owner 😈',
-						id: 'owner'
-					}
-				}]
-				let txt = `*「 ${global.ownername}'s Broadcast」*\n\n${text}`
-				Kanappi.send5ButImg(yoi, txt, `${global.botname}`, log0, btn, thum)
+					Kanappi.sendMessage(i, Message, {
+						quoted: quotedmess
+					})
+				} else if (/audio/.test(mime)) {
+					let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
+					let audioo = fs.readFileSync(media)
+					await Kanappi.sendMessage(i, {
+						audio: audioo,
+						mimetype: 'audio/mpeg',
+						seconds: `${pttduration}`,
+						ptt: true,
+						contextInfo: {
+							externalAdReply: {
+								title: `${global.linkprevtt}`,
+								renderLargerThumbnail: true,
+								showAdAttribution: true,
+								body: `${global.linkprevbody}`,
+								thumbnail: log0,
+								mediaType: 1,
+							}
+						}
+					}, {
+						quoted: quotedmess
+					})
+				} else {
+					if (!text) return reply(`Use : ${prefix + command} attention everybody`)
+					replywithjid( i, text )
+				}
 			}
-			replay('Broadcast Success')
+			replay('Broadcast Success !!')
 		}
 		break
-		case 'bcimage':
-		case 'bcvideo':
-		case 'bcaudio': {
+		case 'bcgc':
+		case 'bcgroup': 
+		case 'bcimagegc':
+		case 'bcvideogc':
+		case 'bcaudiogc': {
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
 			if (!isCreator) return replay(mess.owner)
-			if (!/video/.test(mime) && !/image/.test(mime) && !/audio/.test(mime)) return reply(`*Send/Reply Video/Audio/Image You Want to Broadcast With Caption* ${prefix + command}`)
-			let anu = await store.chats.all().map(v => v.id)
-			let ftroli = {
-				key: {
-					fromMe: false,
-					"participant": "0@s.whatsapp.net",
-					"remoteJid": "919744933034-1604595598@g.us"
-				},
-				"message": {
-					orderMessage: {
-						itemCount: 999999999,
-						status: 200,
-						thumbnail: fs.readFileSync('./Bot Pic/Kanappi.jpg'),
-						surface: 200,
-						message: `${ownername}'s Broadcast`,
-						orderTitle: `${botname}`,
-						sellerJid: '0@s.whatsapp.net'
-					}
-				},
-				contextInfo: {
-					"forwardingScore": 999,
-					"isForwarded": true
-				},
-				sendEphemeral: true
-			}
-			reply(`*Send Broadcast To* ${anu.length} *Group Chat, Time ${anu.length * 1.5} secs*`)
-			for (let i of anu) {
+			let getGroups = await Kanappi.groupFetchAllParticipating()
+			let groups = Object.entries(getGroups).slice(0).map(entry => entry[1])
+			let anu = groups.map(v => v.id)
+			let buttons = [{
+				"urlButton": {
+					"displayText": "🌏 Bot Web 🌏",
+					"url": `${websitex}`
+				}
+			}, {
+				"urlButton": {
+					"displayText": "Script🔖",
+					"url": `${botscript}`
+				}
+			}]
+			reply(`Send Broadcast To ${anu.length} Chat\nTime's up ${anu.length * 1.5} second`)
+			for (let i of anu){
 				await sleep(1500)
-				let butoon = [{
-					urlButton: {
-						displayText: 'Bot Web 🍓',
-						url: `${global.websitex}`
-					}
-				}, {
-					urlButton: {
-						displayText: 'Script 🍜',
-						url: `${global.botscript}`
-					}
-				}, {
-					quickReplyButton: {
-						displayText: 'Bot Status 🚀',
-						id: 'ping'
-					}
-				}, {
-					quickReplyButton: {
-						displayText: 'Menu 🐰',
-						id: 'menu'
-					}
-				}, {
-					quickReplyButton: {
-						displayText: 'Owner 😈',
-						id: 'owner'
-					}
-				}]
-				let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
-				let buffer = fs.readFileSync(media)
-				if (/webp/.test(mime)) {
-					Kanappi.sendMessage(i, {
-						sticker: {
-							url: media
+				if (/image/.test(mime)) {
+					let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
+					let imagee = fs.readFileSync(media)
+					let buttonMessage = {
+						image: imagee,
+						caption: `${ m.quoted ? m.quoted.text ? m.quoted.text : q ? q : m.text : q ? q : m.text }`,
+						footer: `${global.botname}`,
+						buttons: buttons,
+						headerType: 4,
+						contextInfo: {
+							externalAdReply: {
+								title: `${global.linkprevttimg}`,
+								renderLargerThumbnail: true,
+								showAdAttribution: true,
+								body: `${global.linkprevbodyimg}`,
+								thumbnail: log0,
+								mediaType: 1,
+							}
 						}
-					}, {
-						quoted: ftroli
+					}
+					Kanappi.sendMessage(i, buttonMessage, {
+						quoted: quotedmess
 					})
-				} else if (/image/.test(mime)) {
-					let Sachu = `*「 ${global.ownername}'s Broadcast」*${text ? '\n\n' + text : ''}`
-					Kanappi.send5ButImg(i, Sachu, `${global.botname}`, buffer, butoon)
 				} else if (/video/.test(mime)) {
-					let Sachu = `*「 ${global.ownername}'s Broadcast」*${text ? '\n\n' + text : ''}`
-					Kanappi.sendMessage(i, {
-						video: buffer,
-						caption: `${Sachu}`
-					}, {
-						quoted: ftroli
+					let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
+					let videoo = fs.readFileSync(media)
+					let Message = {
+						video: videoo,
+						caption: `${ m.quoted ? m.quoted.text ? m.quoted.text : q ? q : m.text : q ? q : m.text }`,
+						contextInfo: {
+							externalAdReply: {
+								title: `${global.linkprevtt}`,
+								renderLargerThumbnail: true,
+								showAdAttribution: true,
+								body: `${global.linkprevbody}`,
+								thumbnail: log0,
+								mediaType: 1,
+							}
+						}
+					}
+					Kanappi.sendMessage(i, Message, {
+						quoted: quotedmess
+					})
+				} else if (/document/.test(mime)) {
+					let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
+					let documentt = fs.readFileSync(media)
+					let Message = {
+						document: documentt,
+						contextInfo: {
+							externalAdReply: {
+								title: `${global.linkprevtt}`,
+								renderLargerThumbnail: true,
+								showAdAttribution: true,
+								body: `${global.linkprevbody}`,
+								thumbnail: log0,
+								mediaType: 1,
+							}
+						}
+					}
+					Kanappi.sendMessage(i, Message, {
+						quoted: quotedmess
 					})
 				} else if (/audio/.test(mime)) {
-					Kanappi.sendMessage(i, {
-						audio: buffer,
-						mimetype: 'audio/mpeg'
+					let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
+					let audioo = fs.readFileSync(media)
+					await Kanappi.sendMessage(i, {
+						audio: audioo,
+						mimetype: 'audio/mpeg',
+						seconds: `${pttduration}`,
+						ptt: true,
+						contextInfo: {
+							externalAdReply: {
+								title: `${global.linkprevtt}`,
+								renderLargerThumbnail: true,
+								showAdAttribution: true,
+								body: `${global.linkprevbody}`,
+								thumbnail: log0,
+								mediaType: 1,
+							}
+						}
 					}, {
-						quoted: ftroli
+						quoted: quotedmess
 					})
 				} else {
-					reply(`*Send/Reply Video/Audio/Image You Want to Broadcast With Caption* ${prefix + command}`)
+					if (!text) return reply(`Use : ${prefix + command} attention everybody`)
+					replywithjid( i, text )
 				}
-				await fs.unlinkSync(media)
 			}
-			reply(` *Send Broadcast To* ${anu.length} *Chats*`)
+			replay('Broadcast Success !!')
 		}
 		break
 		case 'bcloc': {
@@ -7527,7 +7595,6 @@ ${global.themeendline}
 				})
 			break
 		case 'waifu':
-		case 'loli':
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
 			reply(mess.wait)
@@ -7537,6 +7604,22 @@ ${global.themeendline}
 				}) => {
 					Kanappi.sendImage(m.chat, data.url, mess.success, m)
 				})
+			break
+		case 'loli':{
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			reply(mess.wait)
+			let loli = JSON.parse(fs.readFileSync('./lib/loli.json'));
+			const data = loli[Math.floor(Math.random() * loli.length)]
+			Kanappi.sendMessage(from, {
+				caption: `${mess.caption}`,
+				image: {
+					url: data
+				},
+			}, {
+				quoted: m
+			})
+			}
 			break
 		case 'naruto':
 			if (isBan) return reply(mess.ban)
@@ -10739,55 +10822,7 @@ ${global.themeemoji} Media Url : ${images}`,
 					}
 				}
 			} catch (err) {
-				repaly(mess.error)
-			}
-		}
-		break
-		case 'igr':
-		case 'igdlreels':
-		case 'instagramreels':
-		case 'igreels': {
-			if (isBan) return reply(mess.ban)
-			if (isBanChat) return reply(mess.banChat)
-			if (!text) return reply(mess.linkm)
-			try {
-				hx.igdl(text).then(async (resed) => {
-					ini_anu = []
-					anu_list = []
-					textbv = `*| INSTAGRAM DOWNLOADER |*\n\n${global.themeemoji} Username : ${resed.user.username ? resed.user.name : "undefined"}\n${global.themeemoji} Followers : ${resed.user.followers}`
-					urut = 1
-					for (let i = 0; i < resed.medias.length; i++) {
-						ini_anu.push({
-							"type": resed.medias[i].fileType,
-							"url": resed.medias[i].url
-						})
-					}
-					ilod = 1
-					for (let i of ini_anu) {
-						anu_list.push({
-							buttonId: `ig ${i.type} ${i.url}`,
-							buttonText: {
-								displayText: `Media ${ilod++}`
-							},
-							type: 1
-						})
-					}
-					textbv += `\n\n_Select the media below to download_`
-					let buttons = anu_list
-					let buttonMessage = {
-						image: log0,
-						jpegThumbnail: thum,
-						caption: textbv,
-						footer: `${global.botname}`,
-						buttons: buttons,
-						headerType: 4
-					}
-					Kanappi.sendMessage(from, buttonMessage, {
-						quoted: m
-					})
-				})
-			} catch (err) {
-				reply(String(err))
+				reply(mess.error)
 			}
 		}
 		break

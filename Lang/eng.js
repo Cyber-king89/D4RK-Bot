@@ -1426,7 +1426,7 @@ exports.DataMenu = (pushname ,prefix) => {
 exports.AmogusMenu = (pushname ,prefix) => {
 	return `
 ┏━「 ${global.botname} 」━━⭓ 
-┃╔══✪「 ANONYMOUS CHAT 」	        
+┃╔══✪「 ANONYMOUS CHAT 」
 ┃╠ ${prefix}anonymous
 ┃╠ ${prefix}start
 ┃╠ ${prefix}next
