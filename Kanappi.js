@@ -105,6 +105,9 @@ const {
 	hentai
 } = require('./lib/scraper2.js')
 const {
+	igDownloader,
+} = require('./lib/scraper')
+const {
 	FajarNews,
 	BBCNews,
 	metroNews,
@@ -416,10 +419,10 @@ module.exports = Kanappi = async (Kanappi, m, chatUpdate, store) => {
 
 		const sendFileFromUrl = async (link, type, options) => {
 			hasil = await getBuffer(link)
-			Kanappi.sendMessage(from, hasil, type, options).catch(e => {
+			Kanappi.sendMessage(m.chatfrom, hasil, type, options).catch(e => {
 				fetch(link).then((hasil) => {
-					Kanappi.sendMessage(from, hasil, type, options).catch(e => {
-						Kanappi.sendMessage(from, {
+					Kanappi.sendMessage(m.chat, hasil, type, options).catch(e => {
+						Kanappi.sendMessage(m.chat, {
 							url: link
 						}, type, options).catch(e => {
 							reply('*Error Failed To Download And Send Media*')
@@ -430,53 +433,7 @@ module.exports = Kanappi = async (Kanappi, m, chatUpdate, store) => {
 			})
 		}
 
-		const sendMediaURL = async (to, url, text = "", mids = []) => {
-			if (mids.length > 0) {
-				text = normalizeMention(to, text, mids)
-			}
-			const fn = Date.now() / 10000;
-			const filename = fn.toString()
-			let mime = ""
-			var download = function(uri, filename, callback) {
-				request.head(uri, function(err, res, body) {
-					mime = res.headers['content-type']
-					request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-				});
-			};
-			download(url, filename, async function() {
-				console.log('done');
-				let media = fs.readFileSync(filename)
-				let type = mime.split("/")[0] + "Message"
-				if (mime === "image/gif") {
-					type = MessageType.video
-					mime = Mimetype.gif
-				}
-				if (mime.split("/")[0] === "audio") {
-					mime = Mimetype.mp4Audio
-				}
-				Kanappi.sendMessage(to, media, type, {
-					quoted: m,
-					"externalAdReply": {
-						"title": `${botname}`,
-						"body": `Gʀᴏᴜᴘ Assɪsᴛᴇɴᴛ Bᴏᴛ`,
-						"previewType": 'PHOTO',
-						"thumbnailUrl": `${''}`,
-						"thumbnail": log0,
-						"sourceUrl": `${''}`
-					},
-					mimetype: mime,
-					caption: text,
-					thumbnail: Buffer.alloc(0),
-					contextInfo: {
-						"mentionedJid": mids
-					}
-				})
-
-				fs.unlinkSync(filename)
-			});
-		}
-
-		const fakestatus = (teks) => {
+		const fakestatus = (teks, fake) => {
 			return Kanappi.sendMessage(from, teks, text, {
 				quoted: {
 					key: {
@@ -5991,6 +5948,22 @@ ${global.themeendline}
 			})
 		}
 		break
+		case 'amogus':
+		case 'amogussticker':
+		case 'amongussticker':
+		case 'amongus': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			var ano = await fetchJson('https://raw.githubusercontent.com/rashidsiregar28/data/main/Among')
+			var wifegerak = ano.split('\n')
+			var wifegerakx = wifegerak[Math.floor(Math.random() * wifegerak.length)]
+			encmedia = await Kanappi.sendImageAsSticker(from, wifegerakx, m, {
+				packname: global.packname,
+				author: global.author,
+			})
+			await fs.unlinkSync(encmedia)
+		}
+		break
 		case 'patrick':
 		case 'patricksticker': {
 			if (isBan) return reply(mess.ban)
@@ -10734,21 +10707,6 @@ ${global.themeemoji} Media Url : ${images}`,
 				}).catch((err) => reply(`Sorry username ${text} was not found or maybe he/she has no story uploaded in her id`))
 		}
 		break
-		case 'ig2':
-		case 'igdl2':
-		case 'instagram2': {
-			if (!q) return reply('*Which Links?*')
-			if (!q.includes('instagram')) return reply(mess.error.Iv)
-			reply(mess.wait)
-			anu = await igDownloader(`${q}`)
-				.then((data) => {
-					sendMediaURL(m.chat, data.result.link, data.result.desc, mek)
-				})
-				.catch((err) => {
-					reply(String(err))
-				})
-		}
-		break
 		case 'ig':
 		case 'igdl':
 		case 'instagram': {
@@ -10785,6 +10743,7 @@ ${global.themeemoji} Media Url : ${images}`,
 			}
 		}
 		break
+		case 'igr':
 		case 'igdlreels':
 		case 'instagramreels':
 		case 'igreels': {
@@ -14359,9 +14318,11 @@ View List Of Messages With ${prefix}listmsg`)
 		case 'speed': {
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
-			timestampe = speed();
-			latensie = speed() - timestampe
-			reply(`*「 𝙎𝙋𝙀𝙀𝘿 𝙏𝙀𝙎𝙏 」*\nRespond in ${latensie.toFixed(4)} Sec 💬`)
+			let timestamp = speed()
+			let latensi = speed() - timestamp
+			neww = performance.now()
+			oldd = performance.now()
+			reply(`*「 𝙎𝙋𝙀𝙀𝘿 𝙏𝙀𝙎𝙏 」*\nRespond in ${latensi.toFixed(4)} _Second_ \n ${oldd - neww} _miliseconds_\n\nRuntime : ${runtime(process.uptime())}`)
 		}
 		break
 		case 'p':
@@ -14415,37 +14376,6 @@ _CPU Core(s) Usage (${cpus.length} Core CPU)_
 ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Object.keys(cpu.times).map(type => `- *${(type + '*').padEnd(6)}: ${(100 * cpu.times[type] / cpu.total).toFixed(2)}%`).join('\n')}`).join('\n\n')}` : ''}
                 `.trim()
 			reply(respon)
-		}
-		break
-		case 'searchmsg': {
-			if (args.length < 1) return reply(`*What Message Are You Looking For?\nEx-: ${prefix + command} halo|10*`)
-			teks = arg
-			if (teks.includes("|")) {
-				try {
-					var ve = teks.split("|")[0]
-					var za = teks.split("|")[1]
-					sampai = `${za}`
-					if (isNaN(sampai)) return reply('*Must be a Number!*')
-					batas = parseInt(sampai) + 1
-					if (batas > 30) return reply('*Max 30!*')
-					reply(mess.wait)
-					cok = await Kanappi.searchMessages(`${ve}`, from, batas, 1)
-					if (cok.messages.length < 2) return reply('*Message Not Found*')
-					if (cok.messages.length < parseInt(batas)) reply(`*Found Only* ${cok.messages.length - 1} *Message*`)
-					for (i = 1; i < cok.messages.length; i++) {
-						if (cok.messages[i].message) {
-							Kanappi.sendMessage(from, `*Found!*`, text, {
-								sendEphemeral: true,
-								quoted: cok.messages[i]
-							})
-						}
-					}
-				} catch (e) {
-					return reply(String(e))
-				}
-			} else {
-				reply(`*The format is wrong tod This is an example of the correct format* : ${prefix + command} halo|10`)
-			}
 		}
 		break
 		case 'owner':
