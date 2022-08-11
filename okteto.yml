@@ -12,7 +12,7 @@ build:
   kanappi-bot:
     context: .
     image: okteto/node:14
-    command: npm start
+    command: bash
     dockerfile: Dockerfile
 
 # The deploy section defines how to deploy your development environment
@@ -34,7 +34,7 @@ build:
 dev:
   kanappi-bot:
     image: okteto/node:14
-    command: npm start
+    command: bash
     sync:
       - .:/usr/src/app
     forward:
