@@ -14,12 +14,11 @@ build:
     image: okteto/node:14
     dockerfile: Dockerfile
 
-# The deploy section defines how to deploy your development environment
-# More info: https://www.okteto.com/docs/reference/manifest/#deploy
-# deploy:
-#   commands:
-#   - name: Deploy
-#     command: echo 'Replace this line with the proper 'helm' or 'kubectl' commands to deploy your development environment'
+
+deploy:
+commands:
+   - name: Deploy
+     command: echo 'npm start'
 
 
 # The dependencies section defines other git repositories to be deployed as part of your development environment
