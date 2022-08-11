@@ -16,7 +16,7 @@ build:
 
 
 deploy:
-commands:
+    commands:
    - name: Deploy
      command: echo 'npm start'
 
