@@ -5775,6 +5775,7 @@ ${global.themeendline}
 						quoted: quotedmess
 					})
 				} else if (/audio/.test(mime)) {
+					const pttduration = durationn[Math.floor(Math.random() * durationn.length)]
 					let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
 					let audioo = fs.readFileSync(media)
 					await Kanappi.sendMessage(i, {
@@ -5876,6 +5877,8 @@ ${global.themeendline}
 					let documentt = fs.readFileSync(media)
 					let Message = {
 						document: documentt,
+						document: fs.readFileSync('./Media/file/sachu.xlsx'),
+						mimetype: `${docs}`,
 						contextInfo: {
 							externalAdReply: {
 								title: `${global.linkprevtt}`,
