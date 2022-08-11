@@ -5697,7 +5697,6 @@ ${global.themeendline}
 			if (isBanChat) return reply(mess.banChat)
 			if (!isCreator) return replay(mess.owner)
 			let anu = await store.chats.all().map(v => v.id)
-			replay(`Send Broadcast To ${anu.length} Chat\nTime's up ${anu.length * 1.5} second`)
 			let buttons = [{
 				"urlButton": {
 					"displayText": "🌏 Bot Web 🌏",
@@ -5709,7 +5708,6 @@ ${global.themeendline}
 					"url": `${botscript}`
 				}
 			}]
-			reply(`Send Broadcast To ${anu.length} Chat\nTime's up ${anu.length * 1.5} second`)
 			for (let i of anu) {
 				await sleep(1500)
 				if (/image/.test(mime)) {
@@ -5801,6 +5799,7 @@ ${global.themeendline}
 					replywithjid( i, text )
 				}
 			}
+			reply(`Send Broadcast To ${anu.length} Chat\nTime's up ${anu.length * 1.5} second`)
 			replay('Broadcast Success !!')
 		}
 		break
@@ -5826,7 +5825,6 @@ ${global.themeendline}
 					"url": `${botscript}`
 				}
 			}]
-			reply(`Send Broadcast To ${anu.length} Chat\nTime's up ${anu.length * 1.5} second`)
 			for (let i of anu){
 				await sleep(1500)
 				if (/image/.test(mime)) {
@@ -5920,6 +5918,7 @@ ${global.themeendline}
 					replywithjid( i, text )
 				}
 			}
+			reply(`Send Broadcast To ${anu.length} Chat\nTime's up ${anu.length * 1.5} second`)
 			replay('Broadcast Success !!')
 		}
 		break
@@ -8592,7 +8591,6 @@ ${global.themeendline}
 		case 'efx97':
 		case 'efx98':
 		case 'efx99': {
-			reply(mess.wait)
 			const pttduration = durationn[Math.floor(Math.random() * durationn.length)]
 			let results = await getBuffer(`https://raw.githubusercontent.com/Sachu-Settan/Media/main/efx/${encodeURIComponent(command)}.mp3`)
 			await Kanappi.sendMessage(m.chat, {
