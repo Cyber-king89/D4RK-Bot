@@ -12,7 +12,6 @@ build:
   kanappi-bot:
     context: .
     image: okteto/node:14
-    command: bash
     dockerfile: Dockerfile
 
 # The deploy section defines how to deploy your development environment
