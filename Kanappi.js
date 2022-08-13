@@ -97,7 +97,7 @@ const {
 	jadwaltv
 } = require('./lib/jadwaltv')
 const todapi = require("tod-api")
-const xzons = require("xzons-api")
+const sachuapi = require("./lib/api.js")
 const {
 	pinterest
 } = require("./lib/pinterest")
@@ -375,24 +375,15 @@ module.exports = Kanappi = async (Kanappi, m, chatUpdate, store) => {
 			console.error(err)
 		}
 
-		const mentions = (teks, memberr, id) => {
-			(id == null || id == undefined || id == false) ? Kanappi.sendMessage(from, {
-				text: teks.trim(),
-				jpegThumbnail: log0
-			}, extendedText, {
-				sendEphemeral: true,
-				contextInfo: {
-					"mentionedJid": memberr
-				}
-			}): Kanappi.sendMessage(from, {
-				text: teks.trim(),
-				jpegThumbnail: log0
-			}, extendedText, {
-				sendEphemeral: true,
-				quoted: m,
-				contextInfo: {
-					"mentionedJid": memberr
-				}
+		const mentions = (teks, memberr) => {
+			let buttonMessage = {
+				image: widelog0,
+				caption: teks.trim(),
+				headerType: 4,
+				mentions: memberr
+			}
+			Kanappi.sendMessage(m.chat, buttonMessage, {
+				quoted: quotedmess
 			})
 		}
 
@@ -4397,9 +4388,9 @@ Cieeee, What's Going On❤️💖👀`
 		case 'seenby': {
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
-			if (!m.isGroup) return reply(mess.group)
+			if (!m.isGroup) return replay(`${mess.group}`)
 			try {
-				infom = await Kanappi.messageInfo(m.chat, mek.message.extendedTextMessage.contextInfo.stanzaId)
+				infom = await Kanappi.messageInfo(m.chat, m.message.extendedTextMessage.contextInfo.stanzaId)
 				tagg = []
 				teks = `*• Read by :*\n\n`
 				for (let i of infom.reads) {
@@ -4413,9 +4404,8 @@ Cieeee, What's Going On❤️💖👀`
 					teks += `> ` + moment(`${i.t}` * 1000).tz('Asia/Kolkata').format('DD/MM/YYYY hh:mm:ss') + '\n\n'
 					tagg.push(i.jid)
 				}
-				mentions(teks, tagg, true)
-			} catch (e) {
-				console.log(color(e))
+				mentions(teks, tagg)
+			} catch (err) {
 				reply('*Reply chat bot!*')
 			}
 		}
@@ -4445,13 +4435,7 @@ Cieeee, What's Going On❤️💖👀`
 			if (isBanChat) return reply(mess.banChat)
 			if (!isCreator) return replay(`${mess.owner}`)
 			prefix = args.join(' ')
-			Kanappi.sendMessage(from, `*Succes Changing Prefix : ${prefix}*`, text, {
-				quoted: quotedmess,
-				contextInfo: {
-					"forwardingScore": 999,
-					"isForwarded": true
-				}
-			})
+			reply(`*Success Changing Prefix : ${prefix}*`)
 			break
 		case 'restart':
 			if (isBan) return reply(mess.ban)
@@ -4512,8 +4496,7 @@ Cieeee, What's Going On❤️💖👀`
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
 			if (!text) return replay(`Enter Query Text!`)
-			let xzons = require('xzons-api');
-			xzons.styletext(text)
+			sachuapi.styletext(text)
 				.then(result => {
 					let teks = `Entered Text ${text}\n\n`
 					for (let i of result) {
@@ -12116,9 +12099,9 @@ ${themeemoji} Url : ${result.link}
 			xfarr.Film(q)
 				.then(data => {
 					console.log(data)
-					let krl = `*❒「  Film ${q} 」*\n*🌿 Author* : ${data[0].author}\n\n`
+					let krl = `*❒「  Film ${q} 」*\n*🌿 Author* : ${global.ownername}\n\n`
 					for (let i of data) {
-						krl += (`\n────────────────────\n\n *📍Title :* ${i.judul}\n *📟 Quality :* ${i.quality}\n *🖥️ Type : ${i.type}*\n *⌛ Uploaded :* ${i.upload}\n *🌍 Source :* ${i.link}`)
+						krl += (`\n──────────────────\n\n *📍Title :* ${i.judul}\n *📟 Quality :* ${i.quality}\n *🖥️ Type : ${i.type}*\n *⌛ Uploaded :* ${i.upload}\n *🌍 Source :* ${i.link}`)
 					}
 					Kanappi.sendMessage(from, {
 						image: {
@@ -13407,7 +13390,7 @@ _Please choose the button below_`
 			if (isBanChat) return reply(mess.banChat)
 			if (!args[0]) return reply(mess.linkm)
 			try {
-				xzons.youtube(args[0])
+				sachuapi.youtube(args[0])
 					.then(async (result) => {
 						let res = result
 						textyt = `*| YOUTUBE DOWNLOADER |*
@@ -14110,7 +14093,7 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 			}
 			let ran = getRandom('.mp3')
 			const pttduration = durationn[Math.floor(Math.random() * durationn.length)]
-			xzons.gtts(lang).save(ran, textt, function(err, result) {
+			sachuapi.gtts(lang).save(ran, textt, function(err, result) {
 				if (err) {
 					reply(err)
 				}

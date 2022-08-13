@@ -1,6 +1,6 @@
-# Fork Repo
+# `Fork Repo`
 
-<p><a href="https://github.com/Sachu-Settan/Kanappi-Bot/fork"> <img align="center" src="https://git-scm.com/images/logos/downloads/Git-Logo-1788C.png" height="100" width="250" alt="Sachu-Settan" /></a></p>
+<p><a href="https://github.com/Sachu-Settan/Kanappi-Bot/fork"> <img align="center" src="https://git-scm.com/images/logos/downloads/Git-Logo-1788C.png" height="100" width="250" alt="Fork" /></a></p>
 
 # `Scan QR Code For Session`
 [![Qr](https://raw.githubusercontent.com/Sachu-Settan/Media/main/replit.svg)](https://replit.com/@Sachu-Settan/Multi-Device-QR#README.md?output%20only=1&lite=1#index.js)
