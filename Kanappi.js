@@ -97,6 +97,7 @@ const {
 	jadwaltv
 } = require('./lib/jadwaltv')
 const todapi = require("tod-api")
+const xzons = require("xzons-api")
 const {
 	pinterest
 } = require("./lib/pinterest")
@@ -699,7 +700,7 @@ module.exports = Kanappi = async (Kanappi, m, chatUpdate, store) => {
 			}
 		}
 
-		const replywithjid = (jidd,teks) => {
+		const replywithjid = (jidd, teks) => {
 			let buttonMessage = {
 				image: widelog0,
 				caption: `${teks}`,
@@ -3048,7 +3049,7 @@ Report Message: ${text}`
 						}]
 					}
 				}
-			}),{})
+			}), {})
 			Kanappi.relayMessage(m.chat, template.message, {
 				messageId: template.key.id
 			})
@@ -4507,7 +4508,21 @@ Cieeee, What's Going On❤️💖👀`
 			})
 			break
 		case 'fancy':
-		case 'fancytext':
+		case 'fancytext': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			if (!text) return replay(`Enter Query Text!`)
+			let xzons = require('xzons-api');
+			xzons.styletext(text)
+				.then(result => {
+					let teks = `Entered Text ${text}\n\n`
+					for (let i of result) {
+						teks += `${themeemoji} *${i.name}* : ${i.result}\n\n`
+					}
+					reply(teks)
+				});
+		}
+		break
 		case 'style':
 		case 'styletext': {
 			if (isBan) return reply(mess.ban)
@@ -5796,7 +5811,7 @@ ${global.themeendline}
 					})
 				} else {
 					if (!text) return reply(`Use : ${prefix + command} attention everybody`)
-					replywithjid( i, text )
+					replywithjid(i, text)
 				}
 			}
 			reply(`Send Broadcast To ${anu.length} Chat\nTime's up ${anu.length * 1.5} second`)
@@ -5804,7 +5819,7 @@ ${global.themeendline}
 		}
 		break
 		case 'bcgc':
-		case 'bcgroup': 
+		case 'bcgroup':
 		case 'bcimagegc':
 		case 'bcvideogc':
 		case 'bcaudiogc': {
@@ -5825,7 +5840,7 @@ ${global.themeendline}
 					"url": `${botscript}`
 				}
 			}]
-			for (let i of anu){
+			for (let i of anu) {
 				await sleep(1500)
 				if (/image/.test(mime)) {
 					let media = await Kanappi.downloadAndSaveMediaMessage(quoted)
@@ -5915,7 +5930,7 @@ ${global.themeendline}
 					})
 				} else {
 					if (!text) return reply(`Use : ${prefix + command} attention everybody`)
-					replywithjid( i, text )
+					replywithjid(i, text)
 				}
 			}
 			reply(`Send Broadcast To ${anu.length} Chat\nTime's up ${anu.length * 1.5} second`)
@@ -7608,7 +7623,7 @@ ${global.themeendline}
 					Kanappi.sendImage(m.chat, data.url, mess.success, m)
 				})
 			break
-		case 'loli':{
+		case 'loli': {
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
 			reply(mess.wait)
@@ -7622,8 +7637,8 @@ ${global.themeendline}
 			}, {
 				quoted: m
 			})
-			}
-			break
+		}
+		break
 		case 'naruto':
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
@@ -13382,6 +13397,72 @@ _Please choose the button below_`
 			})
 		}
 		break
+		case 'getmusic2':
+		case 'getvideo2':
+		case 'yt2':
+		case 'youtube2':
+		case 'ytvideo2':
+		case 'ytmusic2': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			if (!args[0]) return reply(mess.linkm)
+			try {
+				xzons.youtube(args[0])
+					.then(async (result) => {
+						let res = result
+						textyt = `*| YOUTUBE DOWNLOADER |*
+
+${global.themeemoji} Title : ${res.title}
+${global.themeemoji} Size Mp4 : ${res.size}
+${global.themeemoji} Size Mp3 : ${res.size_mp3}
+${global.themeemoji} Quality : ${res.quality}
+
+_Select video or audio and wait a while_`
+						let buttons = [{
+								buttonId: `video ${res.link}`,
+								buttonText: {
+									displayText: '► Video'
+								},
+								type: 1
+							},
+							{
+								buttonId: `audio ${res.mp3}`,
+								buttonText: {
+									displayText: '♫ Audio'
+								},
+								type: 1
+							}
+						]
+						let buttonMessage = {
+							image: {
+								url: res.thumb
+							},
+							caption: textyt,
+							footer: `${botname}`,
+							buttons: buttons,
+							headerType: 4,
+							contextInfo: {
+								externalAdReply: {
+									title: res.title,
+									body: `${global.ownername}`,
+									thumbnail: {
+										url: res.thumb
+									},
+									mediaType: 2,
+									mediaUrl: args[0],
+									sourceUrl: args[0]
+								}
+							}
+						}
+						Kanappi.sendMessage(from, buttonMessage, {
+							quoted: m
+						})
+					}).catch(_ => _)
+			} catch {
+				reply(err)
+			}
+		}
+		break
 		case 'getmusic':
 		case 'getvideo':
 		case 'yt':
@@ -13501,15 +13582,14 @@ _Select video or audio and wait a while_`
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
 			if (!text) return reply(mess.noargs)
-             brainly(args.join(" ")).then(res => {
-             hmm = '────────────\n'
-             for (let Y of res.data) {
-             hmm += `\n*「 _BRAINLY_ 」*\n\n*➸ Question:* ${Y.pertanyaan}\n\n*➸ Answer:* ${Y.jawaban[0].text}\n───────────\n`
-}
-             reply(hmm)
-             console.log(res)
-})
-             break
+			brainly(args.join(" ")).then(res => {
+				hmm = '────────────\n'
+				for (let Y of res.data) {
+					hmm += `\n*「 _BRAINLY_ 」*\n\n*➸ Question:* ${Y.pertanyaan}\n\n*➸ Answer:* ${Y.jawaban[0].text}\n───────────\n`
+				}
+				reply(hmm)
+			})
+			break
 		case 'ytdl': {
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
@@ -13809,7 +13889,7 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 			try {
 				let set
 				if(/mp3/.test(command)) set = '-vn -ar 44100 -ac 2 -b:a 192k'
-				if(/toaud/.test(command)) set = '-vn -ar 44100 -ac 2 -b:a 192k'
+				if (/toaud/.test(command)) set = '-vn -ar 44100 -ac 2 -b:a 192k'
 				if (/tomp3/.test(command)) set = '-vn -ar 44100 -ac 2 -b:a 192k'
 				if (/toaudio/.test(command)) set = '-vn -ar 44100 -ac 2 -b:a 192k'
 				if (/audio/.test(mime)) {
@@ -13865,10 +13945,10 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 				reply(e)
 			}
 			break
-			case 'blackvid':
-			case 'blackmp4':
-			case 'blankmp4':
-			case 'blankvid':{
+		case 'blackvid':
+		case 'blackmp4':
+		case 'blankmp4':
+		case 'blankvid': {
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
 			if (!isQuotedAudio) return reply(mess.auderr)
@@ -13889,9 +13969,9 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 					})
 					fs.unlinkSync(ran)
 				})
-			} catch(err) {
-				reply (err)
-		}
+			} catch (err) {
+				reply(err)
+			}
 		}
 		break
 		case 'reversevid':
@@ -13902,9 +13982,9 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 		case 'slowvid': {
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)
-			if(/smoothvid/.test(command)) set = `-filter:v "minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=120'"`
-			if(/fastvid/.test(command)) set = '-vf  "setpts=0.25*PTS"'
-			if(/slowmo/.test(command)) set = '-vf  "setpts=4*PTS"'
+			if (/smoothvid/.test(command)) set = `-filter:v "minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=120'"`
+			if (/fastvid/.test(command)) set = '-vf  "setpts=0.25*PTS"'
+			if (/slowmo/.test(command)) set = '-vf  "setpts=4*PTS"'
 			if (/slowvid/.test(command)) set = '-vf  "setpts=4*PTS"'
 			if (/slomo/.test(command)) set = '-vf  "setpts=4*PTS"'
 			if (/reversevid/.test(command)) set = '-vf reverse -af areverse'
@@ -13934,8 +14014,8 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 					fs.unlinkSync(ran)
 				})
 			} else {
-			reply (mess.correctmediavid)
-		}
+				reply(mess.correctmediavid)
+			}
 		}
 		break
 		case 'bass':
@@ -14020,6 +14100,43 @@ To Download Media, Please Click One Of The Buttons Below Or Enter The ytmp3/ytmp
 				reply(e)
 			}
 			break
+		case 'tts2': {
+			if (isBan) return reply(mess.ban)
+			if (isBanChat) return reply(mess.banChat)
+			let [textt, lang] = args.join` `.split`|`
+			if (!textt) reply `Example: ${prefix + ` ` + command} Textt|Language`
+			if (!lang) {
+				lang = langfortts
+			}
+			let ran = getRandom('.mp3')
+			const pttduration = durationn[Math.floor(Math.random() * durationn.length)]
+			xzons.gtts(lang).save(ran, textt, function(err, result) {
+				if (err) {
+					reply(err)
+				}
+				let rann = fs.readFileSync(ran)
+				Kanappi.sendMessage(m.chat, {
+					audio: rann,
+					mimetype: 'audio/mpeg',
+					seconds: `${pttduration}`,
+					ptt: true,
+					contextInfo: {
+						externalAdReply: {
+							renderLargerThumbnail: true,
+							showAdAttribution: true,
+							thumbnail: log0,
+							mediaType: 1,
+							title: `${global.botname}`,
+							body: `Text To Speach => ${textt}`,
+						}
+					}
+				}, {
+					quoted: m
+				})
+				fs.unlinkSync(ran)
+			});
+		}
+		break
 		case 'tts': {
 			if (isBan) return reply(mess.ban)
 			if (isBanChat) return reply(mess.banChat)

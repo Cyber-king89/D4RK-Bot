@@ -72,6 +72,7 @@
     "tod-api": "^1.0.5",
     "util": "^0.12.4",
     "xfarr-api": "^1.0.2",
+    "xzons-api": "^0.2.4",
     "yargs": "^17.2.1"
   },
   "directories": {
