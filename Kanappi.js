@@ -8586,9 +8586,29 @@ ${global.themeendline}
 		case 'efx96':
 		case 'efx97':
 		case 'efx98':
-		case 'efx99': {
+		case 'efx99': 
+				case 'rahman 3':
+			case 'rahman 4':
+			case 'rahman 5':
+			case 'rahman 6':
+			case 'rahman 7':
+			case 'rahman 8':
+			case 'rahman 9':
+			case 'rahman 10':
+				case 'rahman 11':
+			case 'rahman 12':
+			case 'rahman 16':
+			case 'rahman 13':
+			case 'rahman 15':
+			case 'rahman 14':
+				case 'rahman 19':
+			case 'rahman 18':
+				case 'rahman 16':
+			case 'rahman 17':
+			case 'rahman 2':
+			case 'rahman 1':{
 			const pttduration = durationn[Math.floor(Math.random() * durationn.length)]
-			let results = await getBuffer(`https://raw.githubusercontent.com/Sachu-Settan/Media/main/efx/${encodeURIComponent(command)}.mp3`)
+			let results = await getBuffer(`https://raw.githubusercontent.com/Cyber-king89/Media/main/efx/${encodeURIComponent(command)}.mp3`)
 			await Kanappi.sendMessage(m.chat, {
 				audio: results,
 				mimetype: 'audio/mpeg',
