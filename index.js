@@ -107,7 +107,7 @@ async function startKanappi() {
 			level: 'silent'
 		}),
 		printQRInTerminal: true,
-		browser: ['Kanappi Bot', 'Windows', '11.0'],
+		browser: ['Kanappi Bot', 'Chrome', '11.0'],
 		auth: state
 	})
 

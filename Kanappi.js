@@ -7939,8 +7939,9 @@ ${global.themeendline}
 		case 'efx':
 		case 'bgm':
 		case 'bgmidd': {
+			let sachu = await fetchJson(`https://raw.githubusercontent.com/Sachu-Settan/Media/main/efx/efx.json`)
 			const pttduration = durationn[Math.floor(Math.random() * durationn.length)]
-			const randomefx = efx[Math.floor(Math.random() * efx.length)]
+			const randomefx = sachu[Math.floor(Math.random() * sachu.length)]
 			results = await getBuffer(`https://raw.githubusercontent.com/Sachu-Settan/Media/main/efx/${encodeURIComponent(randomefx)}.mp3`)
 			await Kanappi.sendMessage(m.chat, {
 				audio: results,
