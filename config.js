@@ -22,15 +22,15 @@ global.vcardowner = ['436993888888495']
 global.ownername = " 𝗖𝗬𝟯𝗘𝗥 𝗗𝟰𝗥𝗞 🕊" 
 global.ytname = " ™ᑕYB3Я D4ЯK²ᵏ¹" 
 global.socialm = "GitHub: ™ᑕYB3Я D4ЯK²ᵏ¹" 
-global.location = "Kerala ✨, India" 
+global.location = "Kerala KASARGOD ✨, India" 
 
 global.owner = ['436993888888495']
 global.ownertag = ['436993888888495']
 global.botname = '𝗗𝟰𝗥𝗞 𝗕𝟬𝗧' 
 global.linkz = "https://bit.ly/Bot-Zone" 
 global.websitex = "https://cyber-king89.github.io/master404/" // Web Coming Soon
-global.botscript = 'https://github.com/Cyber-king89/D4RK-Bot'
-global.reactmoji = "💝" 
+global.botscript = 'SCRIP IS A PRIVATE BROO'
+global.reactmoji = "👹" 
 global.themeemoji = "⚠"
 global.packname = " "
 global.author = "💖 𝗗𝟰𝗥𝗞 𝗕𝟬𝗧 🕊 \n⚠\n🎀\n👻\n🤙\n☣\n🍇\n🍒\n🥂\n"
@@ -53,7 +53,7 @@ global.err4r = fs.readFileSync("./Bot Pic/Kanappi.jpg")
 global.thumb = fs.readFileSync("./Bot Pic/Kanappi.jpg") 
 global.widelog0 = fs.readFileSync(`./Bot Pic/${Kanappii}`)
 
-global.premium = ['919744933034'] 
+global.premium = ['436993888888495'] 
 global.ntilinkytvid = []
 global.ntilinkytch = []
 global.ntilinkig = []
