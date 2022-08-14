@@ -1680,7 +1680,6 @@ Report Message: ${text}`
 		}
 		break
 		case 'donasi':
-		case 'donate':
 		case 'sewabot':
 		case 'sewa':
 		case 'buypremium':
@@ -1692,10 +1691,8 @@ Report Message: ${text}`
 				}
 			})
 			Kanappi.sendMessage(m.chat, {
-				image: {
-					url: 'https://telegra.ph/file/6a02cf1b00855ff80febb.jpg'
-				},
-				caption: `\n*Hi bro ${m.pushName}*\n\n *Bot Rental Price*\n*250 INR Per Group via Gpay For 1 Month*\n\n*For more details, You Can Chat With The Owner\nhttps://wa.me/919744933034 (Owner)*\n\n*Donate Me : \n\nGPay : +919744933034*`
+				image: fs.readFileSync("./donatee.jpg"),
+				caption: `\n*Hi bro ${m.pushName}*\n\n *Bot Rental Price*\n*250 INR Per Group via Gpay For 1 Month*\n\n*For more details, You Can Chat With The Owner\nhttps://wa.me/917356247984 (Owner)*\n\n*Donate Me : \n\nGPay : +917356247984*`
 			}, {
 				quoted: m
 			})
